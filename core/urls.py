@@ -6,6 +6,8 @@ from . import views
 router = DefaultRouter()
 router.register(r'songs', views.SongViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'playlists', views.PlaylistViewSet)
+router.register(r'detailpls', views.DetailplViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
