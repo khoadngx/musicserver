@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% load static %}<!DOCTYPE html>
-{% block title %}Musicsn home{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+{% block title %}musicsn - The leading music social network{% endblock %}
 {% block content %}
-    {% for usrinfo in data %}
-        <p>username: {{usrinfo.usrname}}</p>
-        <p>name: {{usrinfo.name}}</p>
-        <p>password: {{usrinfo.passwd}}</p>
-        <p>date of birth: {{usrinfo.dob}}</p>
-        <p>following: {{usrinfo.following}}</p>
-        <p>followers: {{usrinfo.followers}}</p>
+    {% for songinfo in data %}
+        {% ifnotequal songinfo.src null %}
+            <div>
+                <audio controls><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+            </div>
+        {% endifnotequal %}
     {% endfor %}
 {% endblock %}

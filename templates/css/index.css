@@ -1,0 +1,21 @@
+body {
+  background: no-repeat center center fixed;
+  background-image: url("../imgs/indexbg.jpg");
+  background-size: cover;
+}
+  
+
+.orangebtn{
+  background-color: #FF5000;
+  color: #FFFFFF;
+}
+
+.transbtn{
+  color: #FFFFFF;
+  background-color: transparent;
+}
+
+.index-input{
+  background-color:#F5F5F5 !important;
+  border: none !important;
+}

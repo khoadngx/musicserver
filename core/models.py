@@ -14,6 +14,7 @@ class Song(models.Model):
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
     genre = models.CharField(max_length=30)
     created = models.DateTimeField(auto_now_add=True)
+    src = models.FileField(upload_to='media/')
     plays = models.IntegerField(null=True, default=0)
     likes = models.IntegerField(null=True, default=0)
 

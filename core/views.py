@@ -1,6 +1,6 @@
 from core.models import Song, User, Playlist, Detailpl
 from core.serializers import SongSerializer, UserSerializer, PlaylistSerializer, DetailplSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -9,6 +9,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
+    ordering = ('usrname',)
+    search_fields = ('name',)
 
 class SongViewSet(viewsets.ModelViewSet):
     """
@@ -17,6 +20,10 @@ class SongViewSet(viewsets.ModelViewSet):
     """
     queryset = Song.objects.all()
     serializer_class = SongSerializer
+    filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
+    ordering = ('id',)
+    search_fields = ('name',)
+
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     """
@@ -25,6 +32,9 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     """
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
+    filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
+    ordering = ('id',)
+    search_fields = ('name',)
 
 class DetailplViewSet(viewsets.ModelViewSet):
     """

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>musicsn - The leading music social network</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Fontawesome CSS -->
+  <link href="{% static 'vendor/fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/index.css' %}" , rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar transparent">
+    <a class="navbar-brand" href="#" style="color: #FF5000;">
+      <img src="{% static 'imgs/icon.png' %}" width="30" height="30" class="d-inline-block align-top" alt=""> musicsn
+    </a>
+    <form class="form-inline my-2">
+      <button class="btn btn-sm transbtn ml-sm-2" type="button" data-toggle="modal" data-target="#signinModal">Sign in</button>
+      <button class="btn btn-sm orangebtn ml-sm-2" type="button" data-toggle="modal" data-target="#createaccountModal">Create account</button>
+    </form>
+  </nav>
+
+  <div class="container full-height relative">
+    <div class="full-height mx-5" style="margin-top:13%;">
+      <div>
+        <div class="quote text-center" style="color:white;">
+          <strong style="font-size:90px;color:#FF5000;">Connect on musicsn</strong>
+          <h4>Discover, stream, and share a constantly expanding mix of music from emerging and major artists around the world.</h4>
+        </div>
+        <div class="input-group mt-5">
+          <input type="text" class="form-control index-input" placeholder="Search for artists, bands, tracks, album, playlists, etc." aria-label="Search"
+            aria-describedby="search-input" required>
+          <div class="input-group-append">
+            <button type="submit" class="btn" aria-pressed="true" style="background-color: #F5F5F5; border: none !important;">
+              <i class="fas fa-search" style="color: #FF5000"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign in Modal -->
+  <div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="signinModalLabel" aria-hidden="true" style="margin-top: 13%;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body my-3">
+          <form method="POST">
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" required>
+            </div>
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-key"></i>
+                </span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" required>
+            </div>
+          </form>
+          <button type="button" class="btn btn-block orangebtn">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create account Modal -->
+  <div class="modal fade" id="createaccountModal" tabindex="-1" role="dialog" aria-labelledby="createaccountModalLabel" aria-hidden="true" style="margin-top: 10%;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body my-3">
+          <form method="POST">
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" required>
+            </div>
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-user-tag"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Full name" aria-label="Fullname" aria-describedby="name-input" required>
+            </div>
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-birthday-cake"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Date of birth (yyyy-mm-dd)" aria-label="Dateofbirth" aria-describedby="dob-input" required>
+            </div>
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-key"></i>
+                </span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" required>
+            </div>
+          </form>
+          <button type="button" class="btn btn-block orangebtn">Create account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+  <!-- Custom JavaScript for this theme -->
+  <script src="{% static 'js/index.js' %}"></script>
+
+</body>
+
+</html>
