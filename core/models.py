@@ -5,7 +5,7 @@ class User(models.Model):
     name = models.CharField(max_length=100, null=False)
     passwd = models.CharField(max_length=30, null=False)
     dob = models.DateField(null=False)
-    ava = models.CharField(max_length=200, blank=True, default='')
+    ava = models.FileField(upload_to='media/')
 
 class Song(models.Model):
     name = models.CharField(max_length=100, null=False)

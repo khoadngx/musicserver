@@ -2,12 +2,112 @@
 {% load static %}
 <!DOCTYPE html>
 {% block title %}musicsn - The leading music social network{% endblock %}
+{% block css %}<link href="{% static 'css/home.css' %}" rel="stylesheet"/>{% endblock %}
+{% block user %}{{usrss}}{% endblock %}
 {% block content %}
-    {% for songinfo in data %}
-        {% ifnotequal songinfo.src null %}
-            <div>
-                <audio controls><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
-            </div>
-        {% endifnotequal %}
-    {% endfor %}
+<div class="row mt-3">
+	<div class="col-8">
+		<ul class="nav nav-tabs mb-4">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#stream">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#collection">Collection</a>
+			</li>
+		</ul>
+	
+		<div class="tab-content">
+			<div id="stream" class="tab-pane in active">
+				{% for songinfo in streamdata %}
+					<div class="card my-3">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-4">
+									<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
+								</div>
+								<div class="col-8">
+									<a class="row" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+									<h4 class="row">
+										{{ songinfo.name }}
+									</h4>
+									<div class="row">
+										<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+									</div>
+									<div class="row">
+										<div class="col-8">
+											<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+												<i class="fas fa-heart"></i>
+												Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+											</button>
+											<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+												<i class="fas fa-plus"></i>
+											</button>
+										</div>
+										<div class="col-4">
+											<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+												<i class="fas fa-play"></i>
+												{{ songinfo.plays }}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div id="collection" class="tab-pane fade">
+				{% for songinfo in collectiondata %}
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-4">
+									<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
+								</div>
+								<div class="col-8">
+									<a class="row" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+									<h4 class="row">
+										{{ songinfo.name }}
+									</h4>
+									<div class="row">
+										<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+									</div>
+									<div class="row">
+										<div class="col-8">
+											<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+												<i class="fas fa-heart"></i>
+												Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+											</button>
+											<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+												<i class="fas fa-plus"></i>
+											</button>
+										</div>
+										<div class="col-4">
+											<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+												<i class="fas fa-play"></i>
+												{{ songinfo.plays }}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="col-4">
+		widgets
+	</div>
+</div>
+
 {% endblock %}
+
+<!-- {% for songinfo in songdata %}
+		{% ifequal songinfo.owned usrname %}
+				<div>
+					<audio controls><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+				</div>
+		{% endifequal %}
+{% endfor %} -->
