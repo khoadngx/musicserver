@@ -10,6 +10,7 @@
   <meta name="author" content="">
 
   <title>musicsn - The leading music social network</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'imgs/icon.png' %}" />
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -67,7 +68,7 @@
                   <i class="fas fa-user"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" required>
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" id="signin-usrname" required>
             </div>
             <div class="form-group input-group my-3">
               <div class="input-group-prepend">
@@ -75,10 +76,11 @@
                   <i class="fas fa-key"></i>
                 </span>
               </div>
-              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" required>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" id="signin-passwd" required>
             </div>
           </form>
-          <button type="button" class="btn btn-block orangebtn">Continue</button>
+          <span id="signin-alert" style="color:red;font-size:12px;"></span>
+          <button type="button" class="btn btn-block orangebtn" id="signin-btn">Continue</button>
         </div>
       </div>
     </div>
@@ -96,7 +98,7 @@
                   <i class="fas fa-user"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" required>
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" id="new-usrname" required>
             </div>
             <div class="form-group input-group my-3">
               <div class="input-group-prepend">
@@ -104,7 +106,7 @@
                   <i class="fas fa-user-tag"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Full name" aria-label="Fullname" aria-describedby="name-input" required>
+              <input type="text" class="form-control" placeholder="Full name" aria-label="Fullname" aria-describedby="name-input" id="new-name" required>
             </div>
             <div class="form-group input-group my-3">
               <div class="input-group-prepend">
@@ -112,7 +114,7 @@
                   <i class="fas fa-birthday-cake"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Date of birth (yyyy-mm-dd)" aria-label="Dateofbirth" aria-describedby="dob-input" required>
+              <input type="text" class="form-control" placeholder="Date of birth (yyyy-mm-dd)" aria-label="Dateofbirth" aria-describedby="dob-input" id="new-dob" required>
             </div>
             <div class="form-group input-group my-3">
               <div class="input-group-prepend">
@@ -120,10 +122,11 @@
                   <i class="fas fa-key"></i>
                 </span>
               </div>
-              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" required>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" id="new-passwd" required>
             </div>
           </form>
-          <button type="button" class="btn btn-block orangebtn">Create account</button>
+          <span id="create-alert" style="color:red;font-size:12px;"></span>
+          <button type="button" class="btn btn-block orangebtn" id="create-btn">Create account</button>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 # core/serializers.py, this file was created manually
 from rest_framework import serializers
-from .models import User, Song, Playlist, Detailpl
+from .models import User, Song, Playlist, Detailpl, Follow
  
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +20,9 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class DetailplSerializer(serializers.ModelSerializer):
     class Meta:
         model = Detailpl
+        fields = '__all__'
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
         fields = '__all__'

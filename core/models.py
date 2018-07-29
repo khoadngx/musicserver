@@ -6,8 +6,6 @@ class User(models.Model):
     passwd = models.CharField(max_length=30, null=False)
     dob = models.DateField(null=False)
     ava = models.CharField(max_length=200, blank=True, default='')
-    following = models.IntegerField(null=True, default=0)
-    followers = models.IntegerField(null=True, default=0)
 
 class Song(models.Model):
     name = models.CharField(max_length=100, null=False)
@@ -30,3 +28,10 @@ class Detailpl(models.Model):
 
     class Meta:
         unique_together = ('playlist', 'song')
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followerusr')
+    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followedusr')
+
+    class Meta:
+        unique_together = ('follower', 'followed')

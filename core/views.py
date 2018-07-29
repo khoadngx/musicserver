@@ -1,5 +1,5 @@
-from core.models import Song, User, Playlist, Detailpl
-from core.serializers import SongSerializer, UserSerializer, PlaylistSerializer, DetailplSerializer
+from core.models import Song, User, Playlist, Detailpl, Follow
+from core.serializers import SongSerializer, UserSerializer, PlaylistSerializer, DetailplSerializer, FollowSerializer
 from rest_framework import viewsets, filters
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -43,3 +43,11 @@ class DetailplViewSet(viewsets.ModelViewSet):
     """
     queryset = Detailpl.objects.all()
     serializer_class = DetailplSerializer
+
+class FollowViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
