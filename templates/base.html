@@ -27,7 +27,7 @@
 
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="http://127.0.0.1:8000/home/" style="color: #FF5000;">
+    <a class="navbar-brand" href="http://127.0.0.1:8000/" style="color: #FF5000;">
       <img src="{% static 'imgs/icon.png' %}" width="30" height="30" class="d-inline-block align-top" alt=""> musicsn
     </a>
     <div class="input-group mr-3 nav-item">
@@ -43,7 +43,7 @@
         {% block user %}user{% endblock %}
       </button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="usrDropdownBtn">
-        <button class="dropdown-item" type="submit">Profile</button>
+        {% block profile %}<button class="dropdown-item" type="submit">Profile</button>{% endblock %}
         <button class="dropdown-item" type="submit" id="signout-btn">Sign out</button>
       </div>
     </div>

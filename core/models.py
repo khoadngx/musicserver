@@ -5,20 +5,20 @@ class User(models.Model):
     name = models.CharField(max_length=100, null=False)
     passwd = models.CharField(max_length=30, null=False)
     dob = models.DateField(null=False)
-    ava = models.FileField(upload_to='media/')
+    ava = models.FileField(upload_to='media/', null=True)
 
 class Song(models.Model):
     name = models.CharField(max_length=100, null=False)
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
-    genre = models.CharField(max_length=30)
-    created = models.DateTimeField(auto_now_add=True)
-    src = models.FileField(upload_to='media/')
-    plays = models.IntegerField(null=True, default=0)
-    likes = models.IntegerField(null=True, default=0)
+    genre = models.CharField(max_length=30, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    src = models.FileField(upload_to='media/', null=True)
+    plays = models.IntegerField(default=0, null=True)
+    likes = models.IntegerField(default=0, null=True)
 
 class Playlist(models.Model):
     name = models.CharField(max_length=100, null=False)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
     album = models.BooleanField(default=False)
 

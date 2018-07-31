@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 {% block title %}musicsn - The leading music social network{% endblock %}
 {% block css %}<link href="{% static 'css/home.css' %}" rel="stylesheet"/>{% endblock %}
-{% block user %}{{usrss}}{% endblock %}
+{% block user %}{{ currusr.name }}{% endblock %}
+{% block profile %}<button class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">Profile</button>{% endblock %}
 {% block content %}
 <div class="row mt-3">
 	<div class="col-8">
@@ -102,12 +103,34 @@
 	</div>
 </div>
 
-{% endblock %}
+<!-- Profile Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 13%;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body my-3">
+          <form method="POST">
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" id="signin-usrname" required>
+            </div>
+            <div class="form-group input-group my-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-key"></i>
+                </span>
+              </div>
+              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" id="signin-passwd" required>
+            </div>
+          </form>
+          <span id="profile-alert" style="color:red;font-size:12px;"></span>
+          <button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- {% for songinfo in songdata %}
-		{% ifequal songinfo.owned usrname %}
-				<div>
-					<audio controls><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
-				</div>
-		{% endifequal %}
-{% endfor %} -->
+{% endblock %}

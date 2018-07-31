@@ -13,6 +13,9 @@ $('#signout-btn').click(function () {
                 alert('Log out failed!')
                 location.reload(true);
             }
+        },
+        error: function () {
+            alert('Something wrong!');
         }
     });
 });

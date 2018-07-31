@@ -7,33 +7,30 @@ $('#signin-btn').click(function () {
         url: 'http://127.0.0.1:8000/api/users/' + usrname,
         dataType: 'json',
         success: function (data) {
-            if (data != "") {
-                if (data.passwd == passwd) {
-                    var usrss = data.name;
-                    var usrname = data.usrname;
-                    $.ajax({
-                        type: "GET",
-                        url: '/signin',
-                        data: {
-                            'usrss': usrss,
-                            'usrname': usrname,
-                        },
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data.is_success) {
-                                window.location.replace('http://127.0.0.1:8000/home/');
-                            } else {
-                                alert('Sign in failed, please try again!!!')
-                                location.reload(true);
-                            }
+            if (data != "" && data.passwd == passwd) {
+                var usrss = data.usrname;
+                $.ajax({
+                    type: "GET",
+                    url: '/signin',
+                    data: {
+                        'usrss': usrss,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.is_success) {
+                            window.location.replace('http://127.0.0.1:8000/');
+                        } else {
+                            alert('Sign in failed, please try again!!!')
+                            location.reload(true);
                         }
-                    });
-                } else {
-                    $('#signin-alert').html("Incorrect password!!!");
-                }
+                    }
+                });
             } else {
-                $('#signin-alert').html("Incorrect username!!!");
+                $('#signin-alert').html("Incorrect username or password!!!");
             }
+        },
+        error: function () {
+            $('#signin-alert').html("This user doesn't exist!!!");
         }
     });
 });
@@ -58,6 +55,9 @@ $('#new-usrname').change(function () {
                 $('#create-alert').html("Available email address!!!");
                 $('#create-btn').removeClass("disabled");
             }
+        },
+        error: function () {
+            alert('Something wrong!');
         }
     });
 
@@ -81,20 +81,18 @@ $('#create-btn').click(function () {
         dataType: 'json',
         success: function (data) {
             if (data != "") {
-                alert(data.name)
-                var usrss = data.name;
-                var usrname = data.usrname;
+                // alert(data.name)
+                var usrss = data.usrname;
                 $.ajax({
                     type: "GET",
                     url: '/signin',
                     data: {
                         'usrss': usrss,
-                        'usrname': usrname,
                     },
                     dataType: 'json',
                     success: function (data) {
                         if (data.is_success) {
-                            window.location.replace('http://127.0.0.1:8000/home/');
+                            window.location.replace('http://127.0.0.1:8000/');
                         } else {
                             alert('Sign in failed, please try again!!!');
                             location.reload(true);
@@ -105,6 +103,9 @@ $('#create-btn').click(function () {
                 alert("Sorry we can't create accout for you, try again!!!");
                 location.reload(true);
             }
+        },
+        error: function () {
+            alert('Something wrong!');
         }
     });
 
