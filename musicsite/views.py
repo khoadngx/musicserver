@@ -41,13 +41,11 @@ def index(request):
         for i in range(len(streamdata)):
             for j in range(len(usrdata)):
                 if str(usrdata[j]['usrname']) == str(streamdata[i]['owned']):
-                    streamdata[i]['ava'] = usrdata[j]['ava']
                     streamdata[i]['ownedname'] = usrdata[j]['name']
         
         for i in range(len(collectiondata)):
             for j in range(len(usrdata)):
                 if str(usrdata[j]['usrname']) == str(collectiondata[i]['owned']):
-                    collectiondata[i]['ava'] = usrdata[j]['ava']
                     collectiondata[i]['ownedname'] = usrdata[j]['name']
 
         return render(request, 'home.html', { 
@@ -88,3 +86,53 @@ def validate_usrname(request):
             data['is_taken'] = 1
             break
     return JsonResponse(data)
+
+def profile(request, usrname):
+    usrss = ''
+    if request.session.get('usrss'):
+        usrss = request.session.get('usrss')
+    if(usrss == ''): return render(request, 'index.html')
+    else:
+        currusr = {}
+        watchingusr = {}
+        collectiondata = []
+        followcheck = 0
+
+        response = requests.get('http://127.0.0.1:8000/api/follows/')
+        followdata = response.json()
+        for i in range(len(followdata)):
+            if str(followdata[i]['follower']) == str(usrss) and str(followdata[i]['followed']) == str(usrname):
+                followcheck = 1
+                break
+        
+        response = requests.get('http://127.0.0.1:8000/api/songs/')
+        songdata = response.json()
+
+        for i in range(len(songdata)):
+            if str(songdata[i]['owned']) == str(usrname):
+                collectiondata.append(songdata[i])
+
+        response = requests.get('http://127.0.0.1:8000/api/users/')
+        usrdata = response.json()
+
+        for i in range(len(usrdata)):
+            if str(usrdata[i]['usrname']) == str(usrss):
+                currusr = usrdata[i]
+                break
+        
+        for i in range(len(usrdata)):
+            if str(usrdata[i]['usrname']) == str(usrname):
+                watchingusr = usrdata[i]
+                break
+        
+        for i in range(len(collectiondata)):
+            for j in range(len(usrdata)):
+                if str(usrdata[j]['usrname']) == str(collectiondata[i]['owned']):
+                    collectiondata[i]['ownedname'] = usrdata[j]['name']
+
+        return render(request, 'profile.html', { 
+            'currusr': currusr,
+            'watchingusr': watchingusr,
+            'collectiondata': collectiondata,
+            'followcheck': followcheck,
+            })

@@ -6,12 +6,14 @@ class User(models.Model):
     passwd = models.CharField(max_length=30, null=False)
     dob = models.DateField(null=False)
     ava = models.FileField(upload_to='media/', null=True)
+    about = models.CharField(max_length=300, null=True)
 
 class Song(models.Model):
     name = models.CharField(max_length=100, null=False)
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
     genre = models.CharField(max_length=30, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
+    ava = models.FileField(upload_to='media/', null=True)
     src = models.FileField(upload_to='media/', null=True)
     plays = models.IntegerField(default=0, null=True)
     likes = models.IntegerField(default=0, null=True)

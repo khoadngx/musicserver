@@ -4,7 +4,7 @@
 {% block title %}musicsn - The leading music social network{% endblock %}
 {% block css %}<link href="{% static 'css/home.css' %}" rel="stylesheet"/>{% endblock %}
 {% block user %}{{ currusr.name }}{% endblock %}
-{% block profile %}<button class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">Profile</button>{% endblock %}
+{% block profile %}<button class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">Your profile</button>{% endblock %}
 {% block content %}
 <div class="row mt-3">
 	<div class="col-8">
@@ -59,7 +59,7 @@
 			</div>
 			<div id="collection" class="tab-pane fade">
 				{% for songinfo in collectiondata %}
-					<div class="card">
+					<div class="card my-3">
 						<div class="card-body">
 							<div class="row">
 								<div class="col-4">
@@ -104,28 +104,45 @@
 </div>
 
 <!-- Profile Modal -->
-<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 13%;">
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 7%;">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body my-3">
-          <form method="POST">
-            <div class="form-group input-group my-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="username-input" id="signin-usrname" required>
+          <div class="row">
+            <div class="col-4">
+              <img class="mt-2" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+              <button class="btn btn-sm btn-block btn-outline-warning my-1" type="button" id="editprofile-btn">Edit profile</button>
+              <input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
             </div>
-            <div class="form-group input-group my-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fas fa-key"></i>
-                </span>
-              </div>
-              <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-input" id="signin-passwd" required>
+            <div class="col-8">
+              <form method="POST">
+                <div class="form-group input-group my-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
+                </div>
+                <div class="form-group input-group my-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-birthday-cake"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
+                </div>
+                <div class="form-group input-group my-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-key"></i>
+                    </span>
+                  </div>
+                  <input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
           <span id="profile-alert" style="color:red;font-size:12px;"></span>
           <button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
         </div>
@@ -134,3 +151,6 @@
   </div>
 
 {% endblock %}
+
+<!-- Custom JavaScript for this page -->
+{% block customjs %}<script src="{% static 'js/home.js' %}"></script>{% endblock %}
