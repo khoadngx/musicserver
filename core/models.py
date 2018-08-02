@@ -22,7 +22,8 @@ class Playlist(models.Model):
     name = models.CharField(max_length=100, null=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
-    album = models.BooleanField(default=False)
+    ava = models.FileField(upload_to='media/', null=True)
+    likes = models.IntegerField(default=0, null=True)
 
 class Detailpl(models.Model):
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)

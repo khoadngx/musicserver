@@ -96,6 +96,7 @@ def profile(request, usrname):
         currusr = {}
         watchingusr = {}
         collectiondata = []
+        playlist = []
         followcheck = 0
         following = 0
         followers = 0
@@ -142,10 +143,36 @@ def profile(request, usrname):
                 if str(usrdata[j]['usrname']) == str(collectiondata[i]['owned']):
                     collectiondata[i]['ownedname'] = usrdata[j]['name']
 
+        response = requests.get('http://127.0.0.1:8000/api/playlists/')
+        playlistdata = response.json()
+
+        for i in range(len(playlistdata)):
+            if str(playlistdata[i]['owned']) == str(usrname):
+                playlist.append(playlistdata[i])
+        
+        for i in range(len(playlist)):
+            playlist[i]['songs'] = []
+
+        response = requests.get('http://127.0.0.1:8000/api/detailpls/')
+        detailpldata = response.json()
+
+        for i in range(len(playlist)):
+            for j in range(len(detailpldata)):
+                if str(playlist[i]['id']) == str(detailpldata[j]['playlist']):
+                    for k in range(len(songdata)):
+                        if str(detailpldata[j]['song']) == str(songdata[k]['id']):
+                            playlist[i]['songs'].append(songdata[k])
+
+        for i in range(len(playlist)):
+            for j in range(len(usrdata)):
+                if str(usrdata[j]['usrname']) == str(playlist[i]['owned']):
+                    playlist[i]['ownedname'] = usrdata[j]['name']
+
         return render(request, 'profile.html', { 
             'currusr': currusr,
             'watchingusr': watchingusr,
             'collectiondata': collectiondata,
+            'playlist': playlist,
             'followcheck': followcheck,
             'following': following,
             'followers': followers,

@@ -49,7 +49,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-4">
-								<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
+								<img class="incard-ava" src="{{ songinfo.ava }}" alt="ava">
 							</div>
 							<div class="col-8">
 								<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
@@ -61,11 +61,11 @@
 								</div>
 								<div class="row">
 									<div class="col-8">
-										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+										<button type="button" class="btn btn-sm orangebtn mt-2 mr-1">
 											<i class="fas fa-heart"></i>
 											Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
 										</button>
-										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+										<button type="button" class="btn btn-sm orangebtn mt-2">
 											<i class="fas fa-plus"></i>
 										</button>
 									</div>
@@ -83,44 +83,43 @@
 			{% endfor %}
 			</div>
 			<div id="playlist" class="tab-pane fade">
-			<!-- {% for songinfo in collectiondata %}
+			{% for plinfo in playlist %}
 				<div class="card my-3">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-4">
-								<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
+							<div class="col-3">
+								<img class="incard-ava" src="{{ plinfo.ava }}" alt="ava">
+								<button type="button" class="btn btn-sm orangebtn my-1" style="width: 150px;">
+									<i class="fas fa-heart"></i>
+									Likes <span class="badge badge-light">{{ plinfo.likes }}</span>
+								</button>
 							</div>
-							<div class="col-8">
-								<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+							<div class="col-9">
 								<h4 class="row">
-									{{ songinfo.name }}
+									{{ plinfo.name }}
+									<a class="mx-3 my-2" href="http://127.0.0.1:8000/profile/{{ plinfo.owned }}" style="color: #505050; font-size: 11px">{{ plinfo.ownedname }}</a>
 								</h4>
+								{% for info in plinfo.songs %}
 								<div class="row">
-									<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
-								</div>
-								<div class="row">
-									<div class="col-8">
-										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
-											<i class="fas fa-heart"></i>
-											Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
-										</button>
-										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
-											<i class="fas fa-plus"></i>
-										</button>
+									<div class="col-3 my-auto">
+										<h6>{{ info.name }}</h6>
 									</div>
-									<div class="col-4">
-										<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+									<div class="col-7">
+										<audio controls style="width: 100%;"><source src="{{ info.src }}" type="audio/mpeg"></audio>
+									</div>
+									<div class="col-2">
+										<span class="badge badge-light my-3" style="color: #505050;">
 											<i class="fas fa-play"></i>
-											{{ songinfo.plays }}
+											{{ info.plays }}
 										</span>
 									</div>
 								</div>
+								{% endfor %}
 							</div>
 						</div>
 					</div>
 				</div>
-			{% endfor %} -->
-			list
+			{% endfor %}
 			</div>
 		</div>
 	</div>
