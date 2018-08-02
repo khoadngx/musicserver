@@ -10,54 +10,135 @@
 	<div class="col-3">
 		<img class="rounded-circle" src="{{ watchingusr.ava }}" alt="..." style="width: 200px;height: 200px;">
 	</div>
-	<div class="col-7 my-4">
+	<div class="col-8 my-4">
 		<h1 style="color: #000022"><strong>{{ watchingusr.name }}</strong></h1>
 		<p style="color: #000022">{{ watchingusr.about }}</p>
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-9">
+		<ul class="nav nav-tabs my-3 row">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#collection">All</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#playlist">Playlists</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-3">
+		<input type="hidden" id="follower" value="{{ currusr.usrname }}">
+		<input type="hidden" id="followed" value="{{ watchingusr.usrname }}">
+		{% if followcheck == -1 %}
+			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>Your profile</button>
+		{% elif followcheck == 1 %}
+			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" id="unfollow-btn">Following</button>
+		{% else %}
+			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" style="color: #000022; border-color: #000022;" id="follow-btn">Follow</button>
+		{% endif %}
+	</div>
+</div>
+
 <div class="row mt-2">
-	<div class="col-8">
-		{% for songinfo in collectiondata %}
-			<div class="card my-3">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-4">
-							<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
-						</div>
-						<div class="col-8">
-							<a class="row" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
-							<h4 class="row">
-								{{ songinfo.name }}
-							</h4>
-							<div class="row">
-								<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+	<div class="col-9">
+		<div class="tab-content">
+			<div id="collection" class="tab-pane in active">
+			{% for songinfo in collectiondata %}
+				<div class="card my-3">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-4">
+								<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
 							</div>
-							<div class="row">
-								<div class="col-8">
-									<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
-										<i class="fas fa-heart"></i>
-										Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
-									</button>
-									<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
-										<i class="fas fa-plus"></i>
-									</button>
+							<div class="col-8">
+								<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+								<h4 class="row">
+									{{ songinfo.name }}
+								</h4>
+								<div class="row">
+									<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
 								</div>
-								<div class="col-4">
-									<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
-										<i class="fas fa-play"></i>
-										{{ songinfo.plays }}
-									</span>
+								<div class="row">
+									<div class="col-8">
+										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+											<i class="fas fa-heart"></i>
+											Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+										</button>
+										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+									<div class="col-4">
+										<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+											<i class="fas fa-play"></i>
+											{{ songinfo.plays }}
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			{% endfor %}
 			</div>
-		{% endfor %}
+			<div id="playlist" class="tab-pane fade">
+			<!-- {% for songinfo in collectiondata %}
+				<div class="card my-3">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-4">
+								<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
+							</div>
+							<div class="col-8">
+								<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+								<h4 class="row">
+									{{ songinfo.name }}
+								</h4>
+								<div class="row">
+									<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+								</div>
+								<div class="row">
+									<div class="col-8">
+										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+											<i class="fas fa-heart"></i>
+											Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+										</button>
+										<button type="button" class="btn btn-sm orangebtn mt-2 mr-3">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+									<div class="col-4">
+										<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+											<i class="fas fa-play"></i>
+											{{ songinfo.plays }}
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %} -->
+			list
+			</div>
+		</div>
 	</div>
-	<div class="col-4">
-		widgets
+	<div class="col-3">
+		<div class="row mt-2">
+			<div class="col-4 verticalline" align="center">
+				<h6 class="quantity">Following</h6>
+				<span class="quantitynum">{{ following }}</span>
+			</div>
+			<div class="col-4 verticalline" align="center">
+				<h6 class="quantity">Followers</h6>
+				<span class="quantitynum">{{ followers }}</span>
+			</div>
+			<div class="col-4 verticalline" align="center">
+				<h6 class="quantity">Tracks</h6>
+				<span class="quantitynum">{{ tracks }}</span>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -68,13 +149,13 @@
         <div class="modal-body my-3">
           <div class="row">
             <div class="col-4">
-              <img class="mt-2" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
-              <button class="btn btn-sm btn-block btn-outline-warning my-1" type="button" id="editprofile-btn">Edit profile</button>
+              <img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+              <button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
               <input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
             </div>
             <div class="col-8">
               <form method="POST">
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-user-tag"></i>
@@ -82,7 +163,7 @@
                   </div>
                   <input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
                 </div>
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-birthday-cake"></i>
@@ -90,13 +171,16 @@
                   </div>
                   <input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
                 </div>
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-key"></i>
                     </span>
                   </div>
                   <input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+                </div>
+								<div class="form-group input-group my-1">
+                  <textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
                 </div>
               </form>
             </div>

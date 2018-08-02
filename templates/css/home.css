@@ -7,3 +7,14 @@
     background-color: #FF5000;
     color: #FFFFFF;
 }
+
+.orangeoutlinebtn {
+    background-color: transparent;
+    border-color: #FF5000;
+    color: #FF5000;
+}
+.orangeoutlinebtn:hover{
+    background-color: #FF5000;
+    color: #FFFFFF !important;
+    border-color: #FF5000 !important;
+}

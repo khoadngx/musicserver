@@ -8,10 +8,10 @@ $('#signout-btn').click(function() {
         dataType: 'json',
         success: function (data){
             if(data.is_success){
-            window.location.replace('http://127.0.0.1:8000/');
+                window.location.replace('http://127.0.0.1:8000/');
             } else {
-            alert('Log out failed!')
-            location.reload(true);
+                alert('Log out failed!')
+                location.reload(true);
             }
         },
         error: function () {
@@ -24,6 +24,7 @@ $('#editprofile-btn').click(function () {
     $('#profile-name').removeAttr("disabled");
     $('#profile-dob').removeAttr("disabled");
     $('#profile-passwd').removeAttr("disabled");
+    $('#profile-about').removeAttr("disabled");
 });
 
 $('#profile-name').change(function () {
@@ -53,11 +54,21 @@ $('#profile-passwd').change(function () {
     }
 });
 
+$('#profile-about').change(function () {
+    var about = this.value;
+    if(about == ''){
+        $('#profile-btn').addClass("disabled");
+    } else {
+        $('#profile-btn').removeClass("disabled");
+    }
+});
+
 $('#profile-btn').click(function () {
     var usrname = $('#profile-usrname').val().trim();
     var name = $('#profile-name').val().trim();
     var passwd = $('#profile-passwd').val().trim();
     var dob = $('#profile-dob').val().trim();
+    var about = $('#profile-about').val().trim();
 
     $.ajax({
         type: "PUT",
@@ -66,13 +77,17 @@ $('#profile-btn').click(function () {
             'usrname':usrname,
             'name': name,
             'passwd': passwd,
-            'dob': dob
+            'dob': dob,
+            'about': about
         },
         dataType: 'json',
         success: function (data){
-          if(data){
-            location.reload(true);
-          }
+            if(data){
+                location.reload(true);
+            } else {
+                alert('Update failed!');
+                location.reload(true);
+            }
         },
         error: function () {
             alert('Something wrong!');

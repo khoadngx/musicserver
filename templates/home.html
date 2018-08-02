@@ -7,7 +7,7 @@
 {% block profile %}<button class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">Your profile</button>{% endblock %}
 {% block content %}
 <div class="row mt-3">
-	<div class="col-8">
+	<div class="col-9">
 		<ul class="nav nav-tabs mb-4">
 			<li class="nav-item">
 				<a class="nav-link active" data-toggle="tab" href="#stream">Home</a>
@@ -27,7 +27,7 @@
 									<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
 								</div>
 								<div class="col-8">
-									<a class="row" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+									<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
 									<h4 class="row">
 										{{ songinfo.name }}
 									</h4>
@@ -66,7 +66,7 @@
 									<img class="song-ava" src="{{ songinfo.ava }}" alt="ava">
 								</div>
 								<div class="col-8">
-									<a class="row" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
+									<a class="row" href="http://127.0.0.1:8000/profile/{{ songinfo.owned }}" style="color: #505050; font-size: 11px">{{ songinfo.ownedname }}</a>
 									<h4 class="row">
 										{{ songinfo.name }}
 									</h4>
@@ -98,7 +98,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-4">
+	<div class="col-3">
 		widgets
 	</div>
 </div>
@@ -110,13 +110,13 @@
         <div class="modal-body my-3">
           <div class="row">
             <div class="col-4">
-              <img class="mt-2" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
-              <button class="btn btn-sm btn-block btn-outline-warning my-1" type="button" id="editprofile-btn">Edit profile</button>
+              <img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+              <button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
               <input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
             </div>
             <div class="col-8">
               <form method="POST">
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-user-tag"></i>
@@ -124,7 +124,7 @@
                   </div>
                   <input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
                 </div>
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-birthday-cake"></i>
@@ -132,13 +132,16 @@
                   </div>
                   <input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
                 </div>
-                <div class="form-group input-group my-3">
+                <div class="form-group input-group my-1">
                   <div class="input-group-prepend">
                     <span class="input-group-text">
                       <i class="fas fa-key"></i>
                     </span>
                   </div>
                   <input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+								</div>
+								<div class="form-group input-group my-1">
+                  <textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
                 </div>
               </form>
             </div>

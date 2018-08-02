@@ -12,3 +12,28 @@
     background-color: #FF5000;
     color: #FFFFFF;
 }
+
+.orangeoutlinebtn {
+    background-color: transparent;
+    border-color: #FF5000;
+    color: #FF5000;
+}
+.orangeoutlinebtn:hover{
+    background-color: #FF5000;
+    color: #FFFFFF !important;
+    border-color: #FF5000 !important;
+}
+
+.verticalline {
+    border-right: 1px solid gray;
+}
+
+.quantity {
+    margin-bottom: 0%;
+    color: #505050; 
+    font-size: 15px;
+}
+.quantitynum {
+    color: #FF5000; 
+    font-size: 20px;
+}

@@ -97,6 +97,9 @@ def profile(request, usrname):
         watchingusr = {}
         collectiondata = []
         followcheck = 0
+        following = 0
+        followers = 0
+        tracks = 0
 
         response = requests.get('http://127.0.0.1:8000/api/follows/')
         followdata = response.json()
@@ -104,6 +107,14 @@ def profile(request, usrname):
             if str(followdata[i]['follower']) == str(usrss) and str(followdata[i]['followed']) == str(usrname):
                 followcheck = 1
                 break
+        if str(usrss) == str(usrname):
+            followcheck = -1
+
+        for i in range(len(followdata)):
+            if str(followdata[i]['follower']) == str(usrname):
+                following += 1
+            if str(followdata[i]['followed']) == str(usrname):
+                followers += 1
         
         response = requests.get('http://127.0.0.1:8000/api/songs/')
         songdata = response.json()
@@ -111,6 +122,7 @@ def profile(request, usrname):
         for i in range(len(songdata)):
             if str(songdata[i]['owned']) == str(usrname):
                 collectiondata.append(songdata[i])
+                tracks += 1
 
         response = requests.get('http://127.0.0.1:8000/api/users/')
         usrdata = response.json()
@@ -135,4 +147,7 @@ def profile(request, usrname):
             'watchingusr': watchingusr,
             'collectiondata': collectiondata,
             'followcheck': followcheck,
+            'following': following,
+            'followers': followers,
+            'tracks': tracks
             })
