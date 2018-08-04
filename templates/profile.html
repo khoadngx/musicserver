@@ -61,12 +61,9 @@
 								</div>
 								<div class="row">
 									<div class="col-8">
-										<button type="button" class="btn btn-sm orangebtn mt-2 mr-1">
+										<button type="submit" class="btn btn-sm orangebtn mt-2 mr-1" id="sl-{{ songinfo.id }}-btn">
 											<i class="fas fa-heart"></i>
-											Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
-										</button>
-										<button type="button" class="btn btn-sm orangebtn mt-2">
-											<i class="fas fa-plus"></i>
+											Like <span class="badge badge-light">{{ songinfo.likes }}</span>
 										</button>
 									</div>
 									<div class="col-4">
@@ -89,15 +86,16 @@
 						<div class="row">
 							<div class="col-3">
 								<img class="incard-ava" src="{{ plinfo.ava }}" alt="ava">
-								<button type="button" class="btn btn-sm orangebtn my-1" style="width: 150px;">
-									<i class="fas fa-heart"></i>
-									Likes <span class="badge badge-light">{{ plinfo.likes }}</span>
+								{% if followcheck == -1 %}
+								<button type="submit" class="btn btn-sm btn-danger my-1" style="width: 150px;" id="pll-{{ plinfo.id }}-btn">
+									Delete this playlist
 								</button>
+								{% endif %}
 							</div>
 							<div class="col-9">
 								<h4 class="row">
 									{{ plinfo.name }}
-									<a class="mx-3 my-2" href="http://127.0.0.1:8000/profile/{{ plinfo.owned }}" style="color: #505050; font-size: 11px">{{ plinfo.ownedname }}</a>
+									<a class="mx-3 my-auto" href="http://127.0.0.1:8000/profile/{{ plinfo.owned }}" style="color: #505050; font-size: 13px">{{ plinfo.ownedname }}</a>
 								</h4>
 								{% for info in plinfo.songs %}
 								<div class="row">
@@ -143,55 +141,111 @@
 
 <!-- Profile Modal -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 7%;">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body my-3">
-          <div class="row">
-            <div class="col-4">
-              <img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
-              <button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
-              <input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
-            </div>
-            <div class="col-8">
-              <form method="POST">
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-user-tag"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
-                </div>
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-birthday-cake"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
-                </div>
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-key"></i>
-                    </span>
-                  </div>
-                  <input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
-                </div>
-								<div class="form-group input-group my-1">
-                  <textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
-                </div>
-              </form>
-            </div>
-          </div>
-          <span id="profile-alert" style="color:red;font-size:12px;"></span>
-          <button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body my-3">
+				<div class="row">
+					<div class="col-4">
+						<img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+						<button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
+						<input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
+					</div>
+					<div class="col-8">
+						<form method="POST">
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-user-tag"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-birthday-cake"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-key"></i>
+									</span>
+								</div>
+								<input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
+							</div>
+						</form>
+					</div>
+				</div>
+				<span id="profile-alert" style="color:red;font-size:12px;"></span>
+				<button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
 
 <!-- Custom JavaScript for this page -->
-{% block customjs %}<script src="{% static 'js/profile.js' %}"></script>{% endblock %}
+{% block customjs %}
+<script src="{% static 'js/profile.js' %}"></script>
+<script>
+$(window).on('load', function(){
+	var collectiondata = {{ collectiondata|safe }};
+	console.log(collectiondata);
+	var psarr = [];
+	for(var i=0; i<collectiondata.length; i++){
+		psarr.push('#sl-' + collectiondata[i].id + '-btn');
+	}
+	$.each(psarr, function (index, value) {
+		$(value).click(function () {
+			var l = $(value).attr('id').split('-');
+			$.ajax({
+				type: "GET",
+				url: 'http://127.0.0.1:8000/api/songs/' + l[1],
+				dataType: 'json',
+				success: function (dt){
+					if(dt){
+						var likes = dt.likes;
+						likes += 1;
+						$.ajax({
+							type: "PATCH",
+							url: 'http://127.0.0.1:8000/api/songs/' + l[1] + '/',
+							data: {
+								'likes': likes,
+							},
+							dataType: 'json',
+							success: function (dta){
+								if(dta){
+									console.log('like sunmitted!!!');
+									location.reload(true);
+								}else {
+									alert("Sorry can\'t like this song!");
+									location.reload(true);
+								}
+							},
+							error: function () {
+								alert('Something wrong!');
+								location.reload(true);
+							}
+						});
+					}else {
+						alert("Sorry can\'t get song detail!");
+						location.reload(true);
+					}
+				},
+				error: function () {
+					alert('Something wrong!');
+					location.reload(true);
+				}
+			});
+		});
+	});
+});
+</script>
+{% endblock %}

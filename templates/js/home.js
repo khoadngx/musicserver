@@ -94,3 +94,32 @@ $('#profile-btn').click(function () {
         }
     });
 });
+
+$('#createpl-btn').click(function () {
+    var name = $('#createpl-name').val().trim();
+    var owned = $('#createpl-owned').val().trim();
+    var ava = $('#createpl-ava').val().trim();
+
+    $.ajax({
+        type: "POST",
+        url: 'http://127.0.0.1:8000/api/playlists/',
+        data: {
+            'name': name,
+            'owned': owned,
+            'ava': ava,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                console.log(data);
+            } else {
+                alert("Sorry we can't create playlist this time!!!");
+                location.reload(true);
+            }
+        },
+        error: function () {
+            alert('Something wrong!');
+        }
+    });
+
+});

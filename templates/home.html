@@ -36,13 +36,25 @@
 									</div>
 									<div class="row">
 										<div class="col-8">
-											<button type="button" class="btn btn-sm orangebtn mt-2 mr-1">
+											<button type="submit" class="btn btn-sm orangebtn mt-2 mr-1" id="sl-{{ songinfo.id }}-btn">
 												<i class="fas fa-heart"></i>
-												Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+												Like <span class="badge badge-light">{{ songinfo.likes }}</span>
 											</button>
-											<button type="button" class="btn btn-sm orangebtn mt-2">
+											<div class="btn-group">
+												<button class="btn orangebtn btn-sm dropdown-toggle mt-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<i class="fas fa-plus"></i>
+												</button>
+												<div class="dropdown-menu" style="font-size: 13px;">
+													{% for plinfo in playlist %}
+													<button type="button" class="dropdown-item" id="pl-{{ plinfo.id }}-s-{{ songinfo.id }}-btn">{{ plinfo.name }}</button>
+													{% endfor %}
+													<div class="dropdown-divider"></div>
+													<button class="dropdown-item" type="button" data-toggle="modal" data-target="#createplModal">Create a new playlist</button>
+												</div>
+											</div>
+											<!-- <button type="button" class="btn btn-sm orangebtn mt-2">
 												<i class="fas fa-plus"></i>
-											</button>
+											</button> -->
 										</div>
 										<div class="col-4">
 											<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
@@ -75,13 +87,22 @@
 									</div>
 									<div class="row">
 										<div class="col-8">
-											<button type="button" class="btn btn-sm orangebtn mt-2 mr-1">
+											<button type="submit" class="btn btn-sm orangebtn mt-2 mr-1" id="sl-{{ songinfo.id }}-btn">
 												<i class="fas fa-heart"></i>
-												Likes <span class="badge badge-light">{{ songinfo.likes }}</span>
+												Like <span class="badge badge-light">{{ songinfo.likes }}</span>
 											</button>
-											<button type="button" class="btn btn-sm orangebtn mt-2">
-												<i class="fas fa-plus"></i>
-											</button>
+											<div class="btn-group">
+												<button class="btn orangebtn btn-sm dropdown-toggle mt-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													<i class="fas fa-plus"></i>
+												</button>
+												<div class="dropdown-menu" style="font-size: 13px;">
+													{% for plinfo in playlist %}
+													<button type="button" class="dropdown-item" id="pl-{{ plinfo.id }}-s-{{ songinfo.id }}-btn">{{ plinfo.name }}</button>
+													{% endfor %}
+													<div class="dropdown-divider"></div>
+													<button class="dropdown-item" type="button" data-toggle="modal" data-target="#createplModal">Create a new playlist</button>
+												</div>
+											</div>
 										</div>
 										<div class="col-4">
 											<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
@@ -99,61 +120,266 @@
 		</div>
 	</div>
 	<div class="col-3">
-		widgets
+		<p id="foo-alert">widgets</p>
 	</div>
 </div>
 
 <!-- Profile Modal -->
 <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 7%;">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body my-3">
-          <div class="row">
-            <div class="col-4">
-              <img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
-              <button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
-              <input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
-            </div>
-            <div class="col-8">
-              <form method="POST">
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-user-tag"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
-                </div>
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-birthday-cake"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
-                </div>
-                <div class="form-group input-group my-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="fas fa-key"></i>
-                    </span>
-                  </div>
-                  <input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body my-3">
+				<div class="row">
+					<div class="col-4">
+						<img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+						<button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
+						<input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
+					</div>
+					<div class="col-8">
+						<form method="POST">
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-user-tag"></i>
+									</span>
 								</div>
-								<div class="form-group input-group my-1">
-                  <textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
-                </div>
-              </form>
-            </div>
-          </div>
-          <span id="profile-alert" style="color:red;font-size:12px;"></span>
-          <button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+								<input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-birthday-cake"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-key"></i>
+									</span>
+								</div>
+								<input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
+							</div>
+						</form>
+					</div>
+				</div>
+				<span id="profile-alert" style="color:red;font-size:12px;"></span>
+				<button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<!-- Create playlist Modal -->
+<div class="modal fade" id="createplModal" tabindex="-1" role="dialog" aria-labelledby="createplModalLabel" aria-hidden="true" style="margin-top: 13%;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body my-3">
+				<form method="POST">
+					<div class="form-group input-group my-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-user"></i>
+							</span>
+						</div>
+						<input type="text" class="form-control" placeholder="Playlist's name" aria-label="Playlistname" aria-describedby="playlistname-input" id="createpl-name" required>
+					</div>
+					<input type="hidden" id="createpl-owned" value="{{ currusr.usrname }}">
+					<input type="hidden" id="createpl-ava" value="default_playlist.png">
+				</form>
+				<span id="createpl-alert" style="color:red;font-size:12px;"></span>
+				<button type="button" class="btn btn-block orangebtn" id="createpl-btn">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
 
 <!-- Custom JavaScript for this page -->
-{% block customjs %}<script src="{% static 'js/home.js' %}"></script>{% endblock %}
+{% block customjs %}
+<script src="{% static 'js/home.js' %}"></script>
+<script>
+$(window).on('load', function(){
+	// get playlist data from views.py
+	var playlist = {{ playlist|safe }};
+	var streamdata = {{ streamdata|safe }};
+	var collectiondata = {{ collectiondata|safe }};
+	var psarr = [];
+	for(var i=0; i<streamdata.length; i++){
+		psarr.push('#sl-' + streamdata[i].id + '-btn');
+	}
+	for(var i=0; i<collectiondata.length; i++){
+		psarr.push('#sl-' + collectiondata[i].id + '-btn');
+	}
+	$.each(psarr, function (index, value) {
+		$(value).click(function () {
+			var l = $(value).attr('id').split('-');
+			$.ajax({
+				type: "GET",
+				url: 'http://127.0.0.1:8000/api/songs/' + l[1],
+				dataType: 'json',
+				success: function (dt){
+					if(dt){
+						var likes = dt.likes;
+						likes += 1;
+						$.ajax({
+							type: "PATCH",
+							url: 'http://127.0.0.1:8000/api/songs/' + l[1] + '/',
+							data: {
+								'likes': likes,
+							},
+							dataType: 'json',
+							success: function (dta){
+								if(dta){
+									console.log('like sunmitted!!!');
+									location.reload(true);
+								}else {
+									alert("Sorry can\'t like this song!");
+									location.reload(true);
+								}
+							},
+							error: function () {
+								alert('Something wrong!');
+								location.reload(true);
+							}
+						});
+					}else {
+						alert("Sorry can\'t get song detail!");
+						location.reload(true);
+					}
+				},
+				error: function () {
+					alert('Something wrong!');
+					location.reload(true);
+				}
+			});
+		});
+	});
+	$.ajax({
+		type: "GET",
+		url: 'http://127.0.0.1:8000/api/songs/',
+		dataType: 'json',
+		success: function (song){
+				if(song){
+					// create array include sets of add song button's id
+					var arr = [];
+					for(var i=0; i<playlist.length; i++){
+						for(var j=0; j<song.length; j++){
+							arr.push('#pl-' + playlist[i].id + '-s-' + song[j].id + '-btn');
+						}
+					}
+					// this array include sets of add song button's id of current user streamdata and collectiondata
+					var currarr = [];
+					$.each(arr, function (index, value) {
+						if($(value).attr('id') == null){
+							console.log('nothing');
+						} else {
+							currarr.push('#' + $(value).attr('id'));
+						}
+					});
+					// create click function for each button
+					$.each(currarr, function (index, value) {
+						$(value).click(function () {
+							var check = 0;
+							var idcheck = $(value).attr('id').split("-");
+							for(var i=0; i<playlist.length; i++){
+								if(playlist[i].id == idcheck[1]){
+									for(var j=0; j<playlist[i].songs.length; j++){
+										if(playlist[i].songs[j].id == idcheck[3]){
+											check = 1;
+											break;
+										} else {
+											check = 0;
+										}
+									}
+									// if check is 1 -> song already in the playlist and 0 -> add song to this playlist
+									if(check == 0){
+										$.ajax({
+											type: "POST",
+											url: 'http://127.0.0.1:8000/api/detailpls/',
+											data: {
+												'playlist': idcheck[1],
+												'song': idcheck[3],
+											},
+											dataType: 'json',
+											success: function (data){
+												if(data){
+													alert('Song added!!!');
+												}else {
+													alert("Sorry can\'t add this song to playlist!");
+												}
+											},
+											error: function () {
+												alert('Something wrong!');
+											}
+										});
+									} else {
+										// alert('The song is already in this playlist!');
+										var r = confirm("The song is already in this playlist! Do you want to remove it?");
+										if (r == true) {
+											$.ajax({
+												type: "GET",
+												url: 'http://127.0.0.1:8000/api/detailpls/',
+												dataType: 'json',
+												success: function (dat){
+													if(dat){
+														var deleteid;
+														for(var i=0; i<dat.length; i++){
+															if(dat[i].playlist == idcheck[1] && dat[i].song == idcheck[3]){
+																deleteid = dat[i].id;
+																break;
+															} else {
+																console.log('nothing to delete!');
+															}
+														}
+														$.ajax({
+															type: "DELETE",
+															url: 'http://127.0.0.1:8000/api/detailpls/' + deleteid + '/',
+															dataType: 'json',
+															success: function (da){
+																if(da == null){
+																	alert('Song removed!!!');
+																} else {
+																	alert('Sorry can\'t remove the song this time!');
+																}
+															},
+															error: function () {
+																alert('Something wrong!');
+															}
+														});
+													} else {
+														alert("Sorry can\'t get playlist detail!");
+													}
+												},
+												error: function () {
+													alert('Something wrong!');
+												}
+											});
+										} else {
+											console.log('nothing');
+										}
+									}
+								} else {
+									alert('Something wrong with this playlist!');
+								}
+							}
+							location.reload(true);
+						});
+					});
+				} else {
+					alert('for loop failed!')
+					location.reload(true);
+				}
+		},
+		error: function () {
+			alert('Something wrong!');
+		}
+	});
+});
+</script>
+{% endblock %}

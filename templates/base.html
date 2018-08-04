@@ -39,10 +39,10 @@
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn orangebtn dropdown-toggle" type="button" id="usrDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn orangebtn dropdown-toggle" type="submit" id="usrdropdown-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% block user %}user{% endblock %}
       </button>
-      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="usrDropdownBtn">
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="usrdropdown-btn">
         {% block profile %}<button class="dropdown-item" type="submit">Profile</button>{% endblock %}
         <button class="dropdown-item" type="submit" id="signout-btn">Sign out</button>
       </div>
@@ -57,6 +57,7 @@
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 
   <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/bootstrap/js/popper.min.js'%}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js'%}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
