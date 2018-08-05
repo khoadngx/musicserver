@@ -131,23 +131,3 @@ $('#createpl-btn').click(function () {
     });
 
 });
-
-var sptarr = [];
-$.ajax({
-    type: "GET",
-    url: 'http://127.0.0.1:8000/api/songs/',
-    dataType: 'json',
-    success: function (sptdata) {
-        if (sptdata) {
-            for(var i=0; i<sptdata.length; i++){
-                sptarr.push('#spt-' + sptdata[i].id);
-            }
-        } else {
-            alert('Sorry can\'t get playlist data!');
-            location.reload(true);
-        }
-    },
-    error: function () {
-            alert('Something wrong!');
-    }
-});

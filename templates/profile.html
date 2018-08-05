@@ -31,7 +31,7 @@
 		<input type="hidden" id="follower" value="{{ currusr.usrname }}">
 		<input type="hidden" id="followed" value="{{ watchingusr.usrname }}">
 		{% if followcheck == -1 %}
-			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>Your profile</button>
+			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>Upload a new song</button>
 		{% elif followcheck == 1 %}
 			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" id="unfollow-btn">Following</button>
 		{% else %}
@@ -87,7 +87,7 @@
 							<div class="col-3">
 								<img class="incard-ava" src="{{ plinfo.ava }}" alt="ava">
 								{% if followcheck == -1 %}
-								<button type="submit" class="btn btn-sm btn-danger my-1" style="width: 150px;" id="delpl-{{ plinfo.id }}-btn">
+								<button type="button" class="btn btn-sm btn-danger my-1" style="width: 150px;" id="delpl-{{ plinfo.id }}-btn">
 									Delete this playlist
 								</button>
 								{% endif %}
@@ -136,6 +136,21 @@
 				<span class="quantitynum">{{ tracks }}</span>
 			</div>
 		</div>
+		<p class="my-2" style="color:#FF5000; font-size: 13px;">Artists</p>
+		{% for atfinf in atf %}
+			<div class="card my-1">
+				<div class="card-body py-2">
+					<div class="row">
+						<div class="col-4">
+							<img class="rounded-circle" src="{{ atfinf.ava }}" style="width: 40px; height: 40px;" alt="ava">
+						</div>
+						<div class="col-8 my-auto">
+							<a class="row" href="http://127.0.0.1:8000/profile/{{ atfinf.usrname }}" style="color: #FF5000; font-size: 15px">{{ atfinf.name }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 </div>
 
@@ -197,63 +212,56 @@
 <script>
 $(window).on('load', function(){
 	var collectiondata = {{ collectiondata|safe }};
-	console.log(collectiondata);
+	// console.log(collectiondata);
 	var psarr = [];
 	for(var i=0; i<collectiondata.length; i++){
 		psarr.push('#sl-' + collectiondata[i].id + '-btn');
 	}
-	$.each(plarr, function (index, value) {
-		$(value).click(function () {
-			var r = confirm("Are you sure?");
-			var delplid = $(value).attr('id').split('-');
-			if (r == true) {
-				$.ajax({
-					type: "DELETE",
-					url: 'http://127.0.0.1:8000/api/playlists/' + delplid[1],
-					dataType: 'json',
-					success: function (delpl){
-						if(delpl == null){
-							console.log('delete sunmitted!!!');
-							alert(delplid[1]);
-							location.reload(true);
-						}else {
-							alert("Sorry can\'t delete this playlist!");
-							location.reload(true);
-						}
-					},
-					error: function () {
-						alert('Something wrong!');
-						location.reload(true);
-					}
-				});
-			} else {
-				alert('cancel ');
-			}
-		})
-	});
-	$.each(sptarr, function (index, value) {
-		$(value).on('play',function() {
-			var sptid = $(value).attr('id').split('-');
-			$.ajax({
-				type: "GET",
-				url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
-				dataType: 'json',
-				success: function (spt){
-					if(spt){
-						var plays = spt.plays;
-						plays += 1;
+
+	$.ajax({
+		type: "GET",
+		url: 'http://127.0.0.1:8000/api/songs/',
+		dataType: 'json',
+		success: function (sptdata) {
+			if (sptdata) {
+				var sptarr = [];
+				for(var i=0; i<sptdata.length; i++){
+						sptarr.push('#spt-' + sptdata[i].id);
+				}
+				// console.log(sptarr);
+				$.each(sptarr, function (index, value) {
+					$(value).on('play',function() {
+						var sptid = $(value).attr('id').split('-');
 						$.ajax({
-							type: "PATCH",
-							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
-							data: {
-								'plays': plays,
-							},
+							type: "GET",
+							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
 							dataType: 'json',
-							success: function (sptdata){
-								if(sptdata){
-									console.log('play sunmitted!!!');
+							success: function (spt){
+								if(spt){
+									var plays = spt.plays;
+									plays += 1;
+									$.ajax({
+										type: "PATCH",
+										url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
+										data: {
+											'plays': plays,
+										},
+										dataType: 'json',
+										success: function (sptdata){
+											if(sptdata){
+												console.log('play sunmitted!!!');
+											}else {
+												alert("Sorry can\'t play this song!");
+												location.reload(true);
+											}
+										},
+										error: function () {
+											alert('Something wrong!');
+											location.reload(true);
+										}
+									});
 								}else {
-									alert("Sorry can\'t play this song!");
+									alert("Sorry can\'t get song detail!");
 									location.reload(true);
 								}
 							},
@@ -262,18 +270,67 @@ $(window).on('load', function(){
 								location.reload(true);
 							}
 						});
-					}else {
-						alert("Sorry can\'t get song detail!");
-						location.reload(true);
-					}
-				},
-				error: function () {
-					alert('Something wrong!');
-					location.reload(true);
-				}
-			});
-		});
+					});
+				});
+			} else {
+				alert('Sorry can\'t get playlist data!');
+				location.reload(true);
+			}
+		},
+		error: function () {
+						alert('Something wrong!');
+		}
 	});
+
+	$.ajax({
+    type: "GET",
+    url: 'http://127.0.0.1:8000/api/playlists/',
+    dataType: 'json',
+    success: function (pldata) {
+			if (pldata) {
+				var plarr = [];
+				for(var i=0; i<pldata.length; i++){
+						plarr.push('#delpl-' + pldata[i].id + '-btn');
+				}
+				// console.log(plarr);
+				$.each(plarr, function (index, value) {
+					$(value).click(function () {
+						var r = confirm("Are you sure?");
+						var delplid = $(value).attr('id').split('-');
+						if (r == true) {
+							$.ajax({
+								type: "DELETE",
+								url: 'http://127.0.0.1:8000/api/playlists/' + delplid[1],
+								dataType: 'json',
+								success: function (delpl){
+									if(delpl == null){
+										console.log('delete sunmitted!!!');
+										location.reload(true);
+									}else {
+										alert("Sorry can\'t delete this playlist!");
+										location.reload(true);
+									}
+								},
+								error: function () {
+									alert('Something wrong!');
+									location.reload(true);
+								}
+							});
+						} else {
+							console.log('cancel ');
+						}
+					})
+				});
+			} else {
+				alert('Sorry can\'t get playlist data!');
+				location.reload(true);
+			}
+    },
+    error: function () {
+			alert('Something wrong!');
+    }
+	});
+
 	$.each(psarr, function (index, value) {
 		$(value).click(function () {
 			var l = $(value).attr('id').split('-');
@@ -318,6 +375,7 @@ $(window).on('load', function(){
 			});
 		});
 	});
+
 });
 </script>
 {% endblock %}

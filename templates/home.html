@@ -124,7 +124,21 @@
 		</div>
 	</div>
 	<div class="col-3">
-		<p id="foo-alert">widgets</p>
+		<p class="my-3" style="color:#FF5000; font-size: 13px;">Artists</p>
+		{% for atfinf in atf %}
+			<div class="card my-1">
+				<div class="card-body py-2">
+					<div class="row">
+						<div class="col-4">
+							<img class="rounded-circle" src="{{ atfinf.ava }}" style="width: 40px; height: 40px;" alt="ava">
+						</div>
+						<div class="col-8 my-auto">
+							<a class="row" href="http://127.0.0.1:8000/profile/{{ atfinf.usrname }}" style="color: #FF5000; font-size: 15px">{{ atfinf.name }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
 	</div>
 </div>
 
@@ -219,29 +233,50 @@ $(window).on('load', function(){
 	for(var i=0; i<collectiondata.length; i++){
 		psarr.push('#sl-' + collectiondata[i].id + '-btn');
 	}
-	$.each(sptarr, function (index, value) {
-		$(value).on('play',function() {
-			var sptid = $(value).attr('id').split('-');
-			$.ajax({
-				type: "GET",
-				url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
-				dataType: 'json',
-				success: function (spt){
-					if(spt){
-						var plays = spt.plays;
-						plays += 1;
+
+	$.ajax({
+		type: "GET",
+		url: 'http://127.0.0.1:8000/api/songs/',
+		dataType: 'json',
+		success: function (sptdata) {
+			if (sptdata) {
+				var sptarr = [];
+				for(var i=0; i<sptdata.length; i++){
+					sptarr.push('#spt-' + sptdata[i].id);
+				}
+				$.each(sptarr, function (index, value) {
+					$(value).on('play',function() {
+						var sptid = $(value).attr('id').split('-');
 						$.ajax({
-							type: "PATCH",
-							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
-							data: {
-								'plays': plays,
-							},
+							type: "GET",
+							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
 							dataType: 'json',
-							success: function (sptdata){
-								if(sptdata){
-									console.log('play sunmitted!!!');
+							success: function (spt){
+								if(spt){
+									var plays = spt.plays;
+									plays += 1;
+									$.ajax({
+										type: "PATCH",
+										url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
+										data: {
+											'plays': plays,
+										},
+										dataType: 'json',
+										success: function (sptdata){
+											if(sptdata){
+												console.log('play sunmitted!!!');
+											}else {
+												alert("Sorry can\'t play this song!");
+												location.reload(true);
+											}
+										},
+										error: function () {
+											alert('Something wrong!');
+											location.reload(true);
+										}
+									});
 								}else {
-									alert("Sorry can\'t play this song!");
+									alert("Sorry can\'t get song detail!");
 									location.reload(true);
 								}
 							},
@@ -250,18 +285,18 @@ $(window).on('load', function(){
 								location.reload(true);
 							}
 						});
-					}else {
-						alert("Sorry can\'t get song detail!");
-						location.reload(true);
-					}
-				},
-				error: function () {
-					alert('Something wrong!');
-					location.reload(true);
-				}
-			});
-		});
+					});
+				});
+			} else {
+				alert('Sorry can\'t get playlist data!');
+				location.reload(true);
+			}
+		},
+		error: function () {
+			alert('Something wrong!');
+		}
 	});
+	
 	$.each(psarr, function (index, value) {
 		$(value).click(function () {
 			var l = $(value).attr('id').split('-');

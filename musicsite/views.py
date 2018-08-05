@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import requests
 
+import random
+
 def index(request):
     # get session
     usrss = ''
@@ -15,6 +17,7 @@ def index(request):
         streamdata = []
         collectiondata = []
         playlist = []
+        atf = []
 
         # get all users that current user followed
         response = requests.get('http://127.0.0.1:8000/api/follows/')
@@ -84,11 +87,18 @@ def index(request):
                 if str(usrdata[j]['usrname']) == str(playlist[i]['owned']):
                     playlist[i]['ownedname'] = usrdata[j]['name']
 
+        # artists to follow
+        deck = list(range(0, len(usrdata)-1))
+        random.shuffle(deck)
+        for _ in range(3):
+            atf.append(usrdata[deck.pop()])
+
         return render(request, 'home.html', { 
             'currusr': currusr,
             'streamdata': streamdata,
             'collectiondata': collectiondata,
-            'playlist': playlist
+            'playlist': playlist,
+            'atf': atf,
             })
 
 def signin(request):
@@ -137,6 +147,7 @@ def profile(request, usrname):
         collectiondata = []
         playlist = []
         usrpl = []
+        atf = []
         followcheck = 0
         following = 0
         followers = 0
@@ -218,6 +229,12 @@ def profile(request, usrname):
                 if str(usrdata[j]['usrname']) == str(playlist[i]['owned']):
                     playlist[i]['ownedname'] = usrdata[j]['name']
 
+        # artists to follow
+        deck = list(range(0, len(usrdata)-1))
+        random.shuffle(deck)
+        for _ in range(3):
+            atf.append(usrdata[deck.pop()])
+
         return render(request, 'profile.html', { 
             'currusr': currusr,
             'watchingusr': watchingusr,
@@ -227,7 +244,8 @@ def profile(request, usrname):
             'followcheck': followcheck,
             'following': following,
             'followers': followers,
-            'tracks': tracks
+            'tracks': tracks,
+            'atf': atf
             })
 
 def search(request, keyword):
@@ -238,33 +256,105 @@ def search(request, keyword):
     # if there ain't no session redirect to the index page
     if(usrss == ''): return render(request, 'index.html')
     else:
+        currusr = {}
+        playlist = []
         usrsr = []
         songsr = []
         plsr = []
+        atf = []
+
+        response = requests.get('http://127.0.0.1:8000/api/users/')
+        usrdata = response.json()
+        # current user info
+        for i in range(len(usrdata)):
+            if str(usrdata[i]['usrname']) == str(usrss):
+                currusr = usrdata[i]
+                break
+
+        response = requests.get('http://127.0.0.1:8000/api/songs/')
+        songdata = response.json()
+
+        response = requests.get('http://127.0.0.1:8000/api/playlists/')
+        playlistdata = response.json()
+
+        # create playlist which include playlist's data of current user
+        for i in range(len(playlistdata)):
+            if str(playlistdata[i]['owned']) == str(usrss):
+                playlist.append(playlistdata[i])
+        
+        for i in range(len(playlist)):
+            playlist[i]['songs'] = []
+
+        response = requests.get('http://127.0.0.1:8000/api/detailpls/')
+        detailpldata = response.json()
+
+        for i in range(len(playlist)):
+            for j in range(len(detailpldata)):
+                if str(playlist[i]['id']) == str(detailpldata[j]['playlist']):
+                    for k in range(len(songdata)):
+                        if str(detailpldata[j]['song']) == str(songdata[k]['id']):
+                            playlist[i]['songs'].append(songdata[k])
+
+        # name of users own songs in playlist
+        for i in range(len(playlist)):
+            for j in range(len(usrdata)):
+                if str(usrdata[j]['usrname']) == str(playlist[i]['owned']):
+                    playlist[i]['ownedname'] = usrdata[j]['name']
 
         # users search
         response = requests.get('http://127.0.0.1:8000/api/users/?search=' + str(keyword))
-        usrdata = response.json()
+        usrdat = response.json()
 
-        for i in range(len(usrdata)):
-            usrsr.append(usrdata[i])
+        for i in range(len(usrdat)):
+            usrsr.append(usrdat[i])
 
         # songs search
         response = requests.get('http://127.0.0.1:8000/api/songs/?search=' + str(keyword))
-        songdata = response.json()
+        songdat = response.json()
 
-        for i in range(len(songdata)):
-            songsr.append(songdata[i])
+        for i in range(len(songdat)):
+            songsr.append(songdat[i])
+
+        # name of users own songs in songsr
+        for i in range(len(songsr)):
+            for j in range(len(usrdata)):
+                if str(usrdata[j]['usrname']) == str(songsr[i]['owned']):
+                    songsr[i]['ownedname'] = usrdata[j]['name']
 
         # playlists search
         response = requests.get('http://127.0.0.1:8000/api/playlists/?search=' + str(keyword))
-        playlistdata = response.json()
+        playlistdat = response.json()
 
-        for i in range(len(playlistdata)):
-            plsr.append(playlistdata[i])
+        for i in range(len(playlistdat)):
+            plsr.append(playlistdat[i])
+
+        for i in range(len(plsr)):
+            plsr[i]['songs'] = []
+
+        for i in range(len(plsr)):
+            for j in range(len(detailpldata)):
+                if str(plsr[i]['id']) == str(detailpldata[j]['playlist']):
+                    for k in range(len(songdata)):
+                        if str(detailpldata[j]['song']) == str(songdata[k]['id']):
+                            plsr[i]['songs'].append(songdata[k])
+
+        # name of users own songs in plsr
+        for i in range(len(plsr)):
+            for j in range(len(usrdata)):
+                if str(usrdata[j]['usrname']) == str(plsr[i]['owned']):
+                    plsr[i]['ownedname'] = usrdata[j]['name']
+
+        # artists to follow
+        deck = list(range(0, len(usrdata)-1))
+        random.shuffle(deck)
+        for _ in range(3):
+            atf.append(usrdata[deck.pop()])
 
         return render(request, 'search.html', { 
                 'usrsr': usrsr,
                 'songsr': songsr,
                 'plsr': plsr,
+                'currusr': currusr,
+                'playlist': playlist,
+                'atf': atf
                 })

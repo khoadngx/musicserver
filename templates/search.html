@@ -1,34 +1,483 @@
 {% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
-{% block title %}musicsn - The leading music social network{% endblock %}
+{% block title %}Search results{% endblock %}
+{% block css %}<link href="{% static 'css/search.css' %}" rel="stylesheet"/>{% endblock %}
+{% block user %}{{ currusr.name }}{% endblock %}
+{% block profile %}<button class="dropdown-item" type="button" data-toggle="modal" data-target="#profileModal">Your profile</button>{% endblock %}
 {% block content %}
+<div class="row mt-3">
+	<div class="col-9">
+		<!-- Tab bar -->
+		<ul class="nav nav-tabs mb-4">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="#usrsr">User's search results</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#songsr">Song's search results</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="#plsr">Playlist's search results</a>
+			</li>
+		</ul>
+		<!-- Tab content -->
+		<div class="tab-content">
 
-    <h1 class="mt-3">User search result</h1>
-    {% if not usrsr %}
-    <h3 class="mt-1">No user available!</h3>
-    {% else %}
-        {% for usr in usrsr %}
-        <h3 class="mt-1">{{ usr.name }}</h3>
-        {% endfor %}
-    {% endif %}
+			<!-- User's search results -->
+			<div id="usrsr" class="tab-pane in active">
+				{% if not usrsr %}
+				<h5 class="mt-1" style="color:#FF5000;">No user available!</h5>
+				{% else %}
+					{% for usr in usrsr %}
+						<div class="card my-3">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-2">
+										<img src="{{ usr.ava }}" style="width: 100px; height: 100px;" alt="ava">
+									</div>
+									<div class="col-10 my-auto">
+										<a class="row" href="http://127.0.0.1:8000/profile/{{ usr.usrname }}" style="color: #FF5000; font-size: 19px">{{ usr.name }}</a>
+										<div class="row">
+											<h5 style="color: #505050; font-size: 13px">{{ usr.about }}</h5>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
 
-    <h1 class="mt-3">Song search result</h1>
-    {% if not songsr %}
-    <h3 class="mt-1">No song available!</h3>
-    {% else %}
-        {% for song in songsr %}
-        <h3 class="mt-1">{{ song.name }}</h3>
-        {% endfor %}
-    {% endif %}
+			<!-- Song's search results -->
+			<div id="songsr" class="tab-pane fade">
+				{% if not songsr %}
+				<h5 class="mt-1" style="color:#FF5000;">No song available!</h5>
+				{% else %}
+					{% for song in songsr %}
+						<div class="card my-3">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-4">
+										<img class="incard-ava" src="{{ song.ava }}" alt="ava">
+									</div>
+									<div class="col-8">
+										<a class="row" href="http://127.0.0.1:8000/profile/{{ song.owned }}" style="color: #505050; font-size: 11px">{{ song.ownedname }}</a>
+										<h4 class="row">
+											{{ song.name }}
+										</h4>
+										<div class="row">
+											<audio controls style="width: 93%;" id="spt-{{ song.id }}"><source src="{{ song.src }}" type="audio/mpeg"></audio>
+										</div>
+										<div class="row">
+											<div class="col-8">
+												<button type="submit" class="btn btn-sm orangebtn mt-2 mr-1" id="sl-{{ song.id }}-btn">
+													<i class="fas fa-heart"></i>
+													Like <span class="badge badge-light">{{ song.likes }}</span>
+												</button>
+												<div class="btn-group">
+													<button class="btn orangebtn btn-sm dropdown-toggle mt-2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														<i class="fas fa-plus"></i>
+													</button>
+													<div class="dropdown-menu" style="font-size: 13px;">
+														{% for plinfo in playlist %}
+														<button type="button" class="dropdown-item" id="pl-{{ plinfo.id }}-s-{{ song.id }}-btn">{{ plinfo.name }}</button>
+														{% endfor %}
+														<div class="dropdown-divider"></div>
+														<button class="dropdown-item" type="button" data-toggle="modal" data-target="#createplModal">Create a new playlist</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-4">
+												<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
+													<i class="fas fa-play"></i>
+													{{ song.plays }}
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
 
-    <h1 class="mt-3">Playlist search result</h1>
-    {% if not plsr %}
-    <h3 class="mt-1">No playlist available!</h3>
-    {% else %}
-        {% for pl in plsr %}
-        <h3 class="mt-1">{{ pl.name }}</h3>
-        {% endfor %}
-    {% endif %}
+			<!-- Playlist's search results -->
+			<div id="plsr" class="tab-pane fade">
+				{% if not plsr %}
+				<h5 class="mt-1" style="color:#FF5000;">No song available!</h5>
+				{% else %}
+					{% for pl in plsr %}
+					<div class="card my-3">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-3">
+									<img class="incard-ava" src="{{ pl.ava }}" alt="ava">
+								</div>
+								<div class="col-9">
+									<h4 class="row">
+										{{ pl.name }}
+										<a class="mx-3 my-auto" href="http://127.0.0.1:8000/profile/{{ pl.owned }}" style="color: #505050; font-size: 13px">{{ pl.ownedname }}</a>
+									</h4>
+									{% for info in pl.songs %}
+									<div class="row">
+										<div class="col-3 my-auto">
+											<h6>{{ info.name }}</h6>
+										</div>
+										<div class="col-7">
+											<audio controls style="width: 100%;"><source src="{{ info.src }}" type="audio/mpeg"></audio>
+										</div>
+										<div class="col-2">
+											<span class="badge badge-light my-3" style="color: #505050;">
+												<i class="fas fa-play"></i>
+												{{ info.plays }}
+											</span>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				{% endif %}
+			</div>
 
+		</div>
+	</div>
+	<div class="col-3">
+		<p class="my-3" style="color:#FF5000; font-size: 13px;">Artists</p>
+		{% for atfinf in atf %}
+			<div class="card my-1">
+				<div class="card-body py-2">
+					<div class="row">
+						<div class="col-4">
+							<img class="rounded-circle" src="{{ atfinf.ava }}" style="width: 40px; height: 40px;" alt="ava">
+						</div>
+						<div class="col-8 my-auto">
+							<a class="row" href="http://127.0.0.1:8000/profile/{{ atfinf.usrname }}" style="color: #FF5000; font-size: 15px">{{ atfinf.name }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true" style="margin-top: 7%;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body my-3">
+				<div class="row">
+					<div class="col-4">
+						<img class="mt-1" src="{{ currusr.ava }}" alt="ava" style="width: 130px;height: 130px;">
+						<button class="btn btn-sm btn-block orangeoutlinebtn my-1" type="button" id="editprofile-btn">Edit profile</button>
+						<input type="hidden" id="profile-usrname" value="{{ currusr.usrname }}">
+					</div>
+					<div class="col-8">
+						<form method="POST">
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-user-tag"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control" value="{{ currusr.name }}" aria-label="name" aria-describedby="name-input" id="profile-name" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-birthday-cake"></i>
+									</span>
+								</div>
+								<input type="text" class="form-control" value="{{ currusr.dob }}" aria-label="Dateofbirth" aria-describedby="dob-input" id="profile-dob" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fas fa-key"></i>
+									</span>
+								</div>
+								<input type="password" class="form-control" value="{{ currusr.passwd }}" aria-label="Password" aria-describedby="password-input" id="profile-passwd" disabled>
+							</div>
+							<div class="form-group input-group my-1">
+								<textarea rows="3" class="form-control" aria-label="About" aria-describedby="about-input" id="profile-about" disabled>{{ currusr.about }}</textarea>
+							</div>
+						</form>
+					</div>
+				</div>
+				<span id="profile-alert" style="color:red;font-size:12px;"></span>
+				<button type="button" class="btn btn-block orangebtn" id="profile-btn">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Create playlist Modal -->
+<div class="modal fade" id="createplModal" tabindex="-1" role="dialog" aria-labelledby="createplModalLabel" aria-hidden="true" style="margin-top: 13%;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body my-3">
+				<form method="POST">
+					<div class="form-group input-group my-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-headphones"></i>
+							</span>
+						</div>
+						<input type="text" class="form-control" placeholder="Playlist's name" aria-label="Playlistname" aria-describedby="playlistname-input" id="createpl-name" required>
+					</div>
+					<input type="hidden" id="createpl-owned" value="{{ currusr.usrname }}">
+				</form>
+				<span id="createpl-alert" style="color:red;font-size:12px;"></span>
+				<button type="button" class="btn btn-block orangebtn" id="createpl-btn">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+<!-- Custom JavaScript for this page -->
+{% block customjs %}
+<script src="{% static 'js/search.js' %}"></script>
+<script>
+$(window).on('load', function(){
+	// get playlist data from views.py
+	var playlist = {{ playlist|safe }};
+	var songsr = {{ songsr|safe }};
+	var psarr = [];
+	for(var i=0; i<songsr.length; i++){
+		psarr.push('#sl-' + songsr[i].id + '-btn');
+	}
+
+	$.ajax({
+		type: "GET",
+		url: 'http://127.0.0.1:8000/api/songs/',
+		dataType: 'json',
+		success: function (sptdata) {
+			if (sptdata) {
+				var sptarr = [];
+				for(var i=0; i<sptdata.length; i++){
+						sptarr.push('#spt-' + sptdata[i].id);
+				}
+				// console.log(sptarr);
+				$.each(sptarr, function (index, value) {
+					$(value).on('play',function() {
+						var sptid = $(value).attr('id').split('-');
+						$.ajax({
+							type: "GET",
+							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
+							dataType: 'json',
+							success: function (spt){
+								if(spt){
+									var plays = spt.plays;
+									plays += 1;
+									$.ajax({
+										type: "PATCH",
+										url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
+										data: {
+											'plays': plays,
+										},
+										dataType: 'json',
+										success: function (sptdata){
+											if(sptdata){
+												console.log('play sunmitted!!!');
+											}else {
+												alert("Sorry can\'t play this song!");
+												location.reload(true);
+											}
+										},
+										error: function () {
+											alert('Something wrong!');
+											location.reload(true);
+										}
+									});
+								}else {
+									alert("Sorry can\'t get song detail!");
+									location.reload(true);
+								}
+							},
+							error: function () {
+								alert('Something wrong!');
+								location.reload(true);
+							}
+						});
+					});
+				});
+			} else {
+				alert('Sorry can\'t get playlist data!');
+				location.reload(true);
+			}
+		},
+		error: function () {
+						alert('Something wrong!');
+		}
+	});
+
+	$.each(psarr, function (index, value) {
+		$(value).click(function () {
+			var l = $(value).attr('id').split('-');
+			$.ajax({
+				type: "GET",
+				url: 'http://127.0.0.1:8000/api/songs/' + l[1],
+				dataType: 'json',
+				success: function (dt){
+					if(dt){
+						var likes = dt.likes;
+						likes += 1;
+						$.ajax({
+							type: "PATCH",
+							url: 'http://127.0.0.1:8000/api/songs/' + l[1] + '/',
+							data: {
+								'likes': likes,
+							},
+							dataType: 'json',
+							success: function (dta){
+								if(dta){
+									console.log('like sunmitted!!!');
+								}else {
+									alert("Sorry can\'t like this song!");
+									location.reload(true);
+								}
+							},
+							error: function () {
+								alert('Something wrong!');
+								location.reload(true);
+							}
+						});
+					}else {
+						alert("Sorry can\'t get song detail!");
+						location.reload(true);
+					}
+				},
+				error: function () {
+					alert('Something wrong!');
+					location.reload(true);
+				}
+			});
+		});
+	});
+
+	$.ajax({
+		type: "GET",
+		url: 'http://127.0.0.1:8000/api/songs/',
+		dataType: 'json',
+		success: function (song){
+			if(song){
+				// create array include sets of add song button's id
+				var arr = [];
+				for(var i=0; i<playlist.length; i++){
+					for(var j=0; j<song.length; j++){
+						arr.push('#pl-' + playlist[i].id + '-s-' + song[j].id + '-btn');
+					}
+				}
+				// this array include sets of add song button's id of current song search result
+				var currarr = [];
+				$.each(arr, function (index, value) {
+					if($(value).attr('id') == null){
+						console.log('nothing');
+					} else {
+						currarr.push('#' + $(value).attr('id'));
+					}
+				});
+				// create click function for each button
+				$.each(currarr, function (index, value) {
+					$(value).click(function () {
+						var check = 0;
+						var idcheck = $(value).attr('id').split("-");
+						for(var i=0; i<playlist.length; i++){
+							if(playlist[i].id == idcheck[1]){
+								for(var j=0; j<playlist[i].songs.length; j++){
+									if(playlist[i].songs[j].id == idcheck[3]){
+										check = 1;
+										break;
+									} else {
+										check = 0;
+									}
+								}
+								// if check is 1 -> song already in the playlist and 0 -> add song to this playlist
+								if(check == 0){
+									$.ajax({
+										type: "POST",
+										url: 'http://127.0.0.1:8000/api/detailpls/',
+										data: {
+											'playlist': idcheck[1],
+											'song': idcheck[3],
+										},
+										dataType: 'json',
+										success: function (data){
+											if(data){
+												alert('Song added!!!');
+											}else {
+												alert("Sorry can\'t add this song to playlist!");
+											}
+										},
+										error: function () {
+											alert('Something wrong!');
+										}
+									});
+								} else {
+									// alert('The song is already in this playlist!');
+									var r = confirm("The song is already in this playlist! Do you want to remove it?");
+									if (r == true) {
+										$.ajax({
+											type: "GET",
+											url: 'http://127.0.0.1:8000/api/detailpls/',
+											dataType: 'json',
+											success: function (dat){
+												if(dat){
+													var deleteid;
+													for(var i=0; i<dat.length; i++){
+														if(dat[i].playlist == idcheck[1] && dat[i].song == idcheck[3]){
+															deleteid = dat[i].id;
+															break;
+														} else {
+															console.log('nothing to delete!');
+														}
+													}
+													$.ajax({
+														type: "DELETE",
+														url: 'http://127.0.0.1:8000/api/detailpls/' + deleteid + '/',
+														dataType: 'json',
+														success: function (da){
+															if(da == null){
+																alert('Song removed!!!');
+															} else {
+																alert('Sorry can\'t remove the song this time!');
+															}
+														},
+														error: function () {
+															alert('Something wrong!');
+														}
+													});
+												} else {
+													alert("Sorry can\'t get playlist detail!");
+												}
+											},
+											error: function () {
+												alert('Something wrong!');
+											}
+										});
+									} else {
+										console.log('nothing');
+									}
+								}
+							}
+						}
+						location.reload(true);
+					});
+				});
+			} else {
+				alert('for loop failed!')
+				location.reload(true);
+			}
+		},
+		error: function () {
+			alert('Something wrong!');
+		}
+	});
+});
+</script>
 {% endblock %}
