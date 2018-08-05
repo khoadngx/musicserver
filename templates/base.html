@@ -31,11 +31,12 @@
       <img src="{% static 'imgs/icon.png' %}" width="30" height="30" class="d-inline-block align-top" alt=""> musicsn
     </a>
     <div class="input-group mr-3 nav-item">
-      <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2">
+      <input type="text" class="form-control" placeholder="Search for artists, bands, tracks, albums, playlists, etc." aria-label="Search"
+        aria-describedby="search-input" id="search-keyword">
       <div class="input-group-append">
-        <span class="input-group-text" id="basic-addon2">
+        <button type="submit" class="btn" aria-pressed="true" id="search-btn">
           <i class="fas fa-search" style="color: #FF5000"></i>
-        </span>
+        </button>
       </div>
     </div>
     <div class="dropdown">

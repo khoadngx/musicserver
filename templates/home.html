@@ -8,6 +8,7 @@
 {% block content %}
 <div class="row mt-3">
 	<div class="col-9">
+		<!-- Tab bar -->
 		<ul class="nav nav-tabs mb-4">
 			<li class="nav-item">
 				<a class="nav-link active" data-toggle="tab" href="#stream">Home</a>
@@ -16,8 +17,9 @@
 				<a class="nav-link" data-toggle="tab" href="#collection">Collection</a>
 			</li>
 		</ul>
-	
+		<!-- Tab content -->
 		<div class="tab-content">
+			<!-- streamdata -->
 			<div id="stream" class="tab-pane in active">
 				{% for songinfo in streamdata %}
 					<div class="card my-3">
@@ -32,7 +34,7 @@
 										{{ songinfo.name }}
 									</h4>
 									<div class="row">
-										<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+										<audio controls style="width: 93%;" id="spt-{{ songinfo.id }}"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
 									</div>
 									<div class="row">
 										<div class="col-8">
@@ -69,6 +71,8 @@
 					</div>
 				{% endfor %}
 			</div>
+
+			<!-- collectiondata -->
 			<div id="collection" class="tab-pane fade">
 				{% for songinfo in collectiondata %}
 					<div class="card my-3">
@@ -83,7 +87,7 @@
 										{{ songinfo.name }}
 									</h4>
 									<div class="row">
-										<audio controls style="width: 93%;"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
+										<audio controls style="width: 93%;" id="spt-{{ songinfo.id }}"><source src="{{ songinfo.src }}" type="audio/mpeg"></audio>
 									</div>
 									<div class="row">
 										<div class="col-8">
@@ -183,13 +187,12 @@
 					<div class="form-group input-group my-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">
-								<i class="fas fa-user"></i>
+								<i class="fas fa-headphones"></i>
 							</span>
 						</div>
 						<input type="text" class="form-control" placeholder="Playlist's name" aria-label="Playlistname" aria-describedby="playlistname-input" id="createpl-name" required>
 					</div>
 					<input type="hidden" id="createpl-owned" value="{{ currusr.usrname }}">
-					<input type="hidden" id="createpl-ava" value="default_playlist.png">
 				</form>
 				<span id="createpl-alert" style="color:red;font-size:12px;"></span>
 				<button type="button" class="btn btn-block orangebtn" id="createpl-btn">Create</button>
@@ -216,6 +219,49 @@ $(window).on('load', function(){
 	for(var i=0; i<collectiondata.length; i++){
 		psarr.push('#sl-' + collectiondata[i].id + '-btn');
 	}
+	$.each(sptarr, function (index, value) {
+		$(value).on('play',function() {
+			var sptid = $(value).attr('id').split('-');
+			$.ajax({
+				type: "GET",
+				url: 'http://127.0.0.1:8000/api/songs/' + sptid[1],
+				dataType: 'json',
+				success: function (spt){
+					if(spt){
+						var plays = spt.plays;
+						plays += 1;
+						$.ajax({
+							type: "PATCH",
+							url: 'http://127.0.0.1:8000/api/songs/' + sptid[1] + '/',
+							data: {
+								'plays': plays,
+							},
+							dataType: 'json',
+							success: function (sptdata){
+								if(sptdata){
+									console.log('play sunmitted!!!');
+								}else {
+									alert("Sorry can\'t play this song!");
+									location.reload(true);
+								}
+							},
+							error: function () {
+								alert('Something wrong!');
+								location.reload(true);
+							}
+						});
+					}else {
+						alert("Sorry can\'t get song detail!");
+						location.reload(true);
+					}
+				},
+				error: function () {
+					alert('Something wrong!');
+					location.reload(true);
+				}
+			});
+		});
+	});
 	$.each(psarr, function (index, value) {
 		$(value).click(function () {
 			var l = $(value).attr('id').split('-');
@@ -364,8 +410,6 @@ $(window).on('load', function(){
 											console.log('nothing');
 										}
 									}
-								} else {
-									alert('Something wrong with this playlist!');
 								}
 							}
 							location.reload(true);

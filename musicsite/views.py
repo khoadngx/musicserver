@@ -202,14 +202,6 @@ def profile(request, usrname):
         for i in range(len(playlist)):
             playlist[i]['songs'] = []
 
-        # create usrpl which include playlist's data of current user
-        # for i in range(len(playlistdata)):
-        #     if str(playlistdata[i]['owned']) == str(usrss):
-        #         usrpl.append(playlistdata[i])
-        
-        # for i in range(len(usrpl)):
-        #     usrpl[i]['songs'] = []
-
         response = requests.get('http://127.0.0.1:8000/api/detailpls/')
         detailpldata = response.json()
 
@@ -226,19 +218,6 @@ def profile(request, usrname):
                 if str(usrdata[j]['usrname']) == str(playlist[i]['owned']):
                     playlist[i]['ownedname'] = usrdata[j]['name']
 
-        # for i in range(len(usrpl)):
-        #     for j in range(len(detailpldata)):
-        #         if str(usrpl[i]['id']) == str(detailpldata[j]['playlist']):
-        #             for k in range(len(songdata)):
-        #                 if str(detailpldata[j]['song']) == str(songdata[k]['id']):
-        #                     usrpl[i]['songs'].append(songdata[k])
-
-        # # name of users own songs in usrplaylist
-        # for i in range(len(usrpl)):
-        #     for j in range(len(usrdata)):
-        #         if str(usrdata[j]['usrname']) == str(usrpl[i]['owned']):
-        #             usrpl[i]['ownedname'] = usrdata[j]['name']
-
         return render(request, 'profile.html', { 
             'currusr': currusr,
             'watchingusr': watchingusr,
@@ -250,3 +229,42 @@ def profile(request, usrname):
             'followers': followers,
             'tracks': tracks
             })
+
+def search(request, keyword):
+    # get session
+    usrss = ''
+    if request.session.get('usrss'):
+        usrss = request.session.get('usrss')
+    # if there ain't no session redirect to the index page
+    if(usrss == ''): return render(request, 'index.html')
+    else:
+        usrsr = []
+        songsr = []
+        plsr = []
+
+        # users search
+        response = requests.get('http://127.0.0.1:8000/api/users/?search=' + str(keyword))
+        usrdata = response.json()
+
+        for i in range(len(usrdata)):
+            usrsr.append(usrdata[i])
+
+        # songs search
+        response = requests.get('http://127.0.0.1:8000/api/songs/?search=' + str(keyword))
+        songdata = response.json()
+
+        for i in range(len(songdata)):
+            songsr.append(songdata[i])
+
+        # playlists search
+        response = requests.get('http://127.0.0.1:8000/api/playlists/?search=' + str(keyword))
+        playlistdata = response.json()
+
+        for i in range(len(playlistdata)):
+            plsr.append(playlistdata[i])
+
+        return render(request, 'search.html', { 
+                'usrsr': usrsr,
+                'songsr': songsr,
+                'plsr': plsr,
+                })

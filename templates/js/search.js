@@ -8,10 +8,10 @@ $('#signout-btn').click(function() {
         dataType: 'json',
         success: function (data){
             if(data.is_success){
-            window.location.replace('http://127.0.0.1:8000/');
+                window.location.replace('http://127.0.0.1:8000/');
             } else {
-            alert('Log out failed!')
-            location.reload(true);
+                alert('Log out failed!')
+                location.reload(true);
             }
         },
         error: function () {

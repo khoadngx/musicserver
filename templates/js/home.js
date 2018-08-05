@@ -20,6 +20,15 @@ $('#signout-btn').click(function() {
     });
 });
 
+$('#search-btn').click(function() {
+    var keyword = $('#search-keyword').val().trim();
+    if(keyword == ''){
+        alert('please enter keyword!');
+    } else {
+        window.location.replace('http://127.0.0.1:8000/search/' + keyword);
+    }
+});
+
 $('#editprofile-btn').click(function () {
     $('#profile-name').removeAttr("disabled");
     $('#profile-dob').removeAttr("disabled");
@@ -98,7 +107,6 @@ $('#profile-btn').click(function () {
 $('#createpl-btn').click(function () {
     var name = $('#createpl-name').val().trim();
     var owned = $('#createpl-owned').val().trim();
-    var ava = $('#createpl-ava').val().trim();
 
     $.ajax({
         type: "POST",
@@ -106,12 +114,12 @@ $('#createpl-btn').click(function () {
         data: {
             'name': name,
             'owned': owned,
-            'ava': ava,
         },
         dataType: 'json',
         success: function (data) {
             if (data) {
                 console.log(data);
+                location.reload(true);
             } else {
                 alert("Sorry we can't create playlist this time!!!");
                 location.reload(true);
@@ -122,4 +130,24 @@ $('#createpl-btn').click(function () {
         }
     });
 
+});
+
+var sptarr = [];
+$.ajax({
+    type: "GET",
+    url: 'http://127.0.0.1:8000/api/songs/',
+    dataType: 'json',
+    success: function (sptdata) {
+        if (sptdata) {
+            for(var i=0; i<sptdata.length; i++){
+                sptarr.push('#spt-' + sptdata[i].id);
+            }
+        } else {
+            alert('Sorry can\'t get playlist data!');
+            location.reload(true);
+        }
+    },
+    error: function () {
+            alert('Something wrong!');
+    }
 });

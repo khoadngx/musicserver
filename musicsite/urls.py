@@ -9,6 +9,7 @@ urlpatterns = [
     path('signout', views.signout, name='signout'),
     path('validate_usrname', views.validate_usrname, name='validate_usrname'),
     path('profile/<str:usrname>', views.profile, name='profile'),
+    path('search/<str:keyword>', views.search, name='search'),
 ]
 
 if settings.DEBUG:
