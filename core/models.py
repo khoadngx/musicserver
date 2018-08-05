@@ -5,7 +5,7 @@ class User(models.Model):
     name = models.CharField(max_length=100, null=False)
     passwd = models.CharField(max_length=30, null=False)
     dob = models.DateField(null=False)
-    ava = models.FileField(upload_to='media/', default='default_avatar.png')
+    ava = models.FileField(upload_to='media/', default='default_avatar.jpg')
     about = models.CharField(max_length=300, null=True)
 
 class Song(models.Model):

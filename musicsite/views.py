@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 import requests
 
 import random
+from django.core.files.storage import FileSystemStorage
 
 def index(request):
     # get session
@@ -358,3 +359,16 @@ def search(request, keyword):
                 'playlist': playlist,
                 'atf': atf
                 })
+
+def upload_song(request):
+    data = {
+        'is_success': ''
+    }
+    if request.method == 'POST' and request.FILES['fn']:
+        fn = request.FILES['fn']
+        fs = FileSystemStorage()
+        filename = fs.save(fn.name, fn)
+        uploaded_file_url = fs.url(filename)
+        data['is_success'] = uploaded_file_url
+
+    return JsonResponse(data)

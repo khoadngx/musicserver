@@ -174,3 +174,30 @@ $('#follow-btn').click(function () {
         }
     });
 });
+
+// $('#song-upload').change(function () {
+//     var fn = this.files[0];
+//     console.log(fn);
+
+//     $.ajax({
+//         type: "POST",
+//         url: '/upload_song',
+//         data: {
+//             'fn': fn,
+//         },
+//         dataType: 'multipart/form-data',
+//         success: function (data) {
+//             if (data) {
+//                 console.log(data);
+//             } else {
+//                 alert('Sorry follow can\'t submit!');
+//                 // location.reload(true);
+//             }
+//         },
+//         error: function () {
+//             alert('Something wrong!');
+//             // location.reload(true);
+//         }
+//     });
+
+// });

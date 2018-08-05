@@ -31,7 +31,12 @@
 		<input type="hidden" id="follower" value="{{ currusr.usrname }}">
 		<input type="hidden" id="followed" value="{{ watchingusr.usrname }}">
 		{% if followcheck == -1 %}
-			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>Upload a new song</button>
+		<!-- style="display:none;" -->
+			<!-- <label class="btn btn-sm btn-block orangeoutlinebtn mt-3">
+				Upload a new song
+				<input id="song-upload" type="file" style="display:none;">
+			</label> -->
+			<input type="button" value="Your profile" class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>
 		{% elif followcheck == 1 %}
 			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" id="unfollow-btn">Following</button>
 		{% else %}

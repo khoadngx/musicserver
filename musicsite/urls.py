@@ -10,6 +10,7 @@ urlpatterns = [
     path('validate_usrname', views.validate_usrname, name='validate_usrname'),
     path('profile/<str:usrname>', views.profile, name='profile'),
     path('search/<str:keyword>', views.search, name='search'),
+    path('upload_song/', views.upload_song, name='upload_song'),
 ]
 
 if settings.DEBUG:
