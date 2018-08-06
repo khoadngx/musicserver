@@ -11,10 +11,10 @@ class User(models.Model):
 class Song(models.Model):
     name = models.CharField(max_length=100, null=False)
     owned = models.ForeignKey(User, on_delete=models.CASCADE)
-    genre = models.CharField(max_length=30, null=True)
+    genre = models.CharField(max_length=30, default='pop')
     created = models.DateTimeField(auto_now_add=True, null=True)
     ava = models.FileField(upload_to='media/', default='cover_default.png')
-    src = models.FileField(upload_to='media/', null=True)
+    src = models.FileField(upload_to='media/', default='default_audio.mp3')
     plays = models.IntegerField(default=0, null=True)
     likes = models.IntegerField(default=0, null=True)
 

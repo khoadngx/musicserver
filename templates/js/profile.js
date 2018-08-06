@@ -175,29 +175,34 @@ $('#follow-btn').click(function () {
     });
 });
 
-// $('#song-upload').change(function () {
-//     var fn = this.files[0];
-//     console.log(fn);
-
-//     $.ajax({
-//         type: "POST",
-//         url: '/upload_song',
-//         data: {
-//             'fn': fn,
-//         },
-//         dataType: 'multipart/form-data',
-//         success: function (data) {
-//             if (data) {
-//                 console.log(data);
-//             } else {
-//                 alert('Sorry follow can\'t submit!');
-//                 // location.reload(true);
-//             }
-//         },
-//         error: function () {
-//             alert('Something wrong!');
-//             // location.reload(true);
-//         }
-//     });
-
-// });
+$('#song-upload').change(function () {
+    var owned = $('#upload-usrname').val().trim();
+    var fn = this.files[0];
+    if(fn.type == 'audio/mp3'){
+        var name = fn.name.split('.');
+        console.log(fn);
+        $.ajax({
+            type: "POST",
+            url: 'http://127.0.0.1:8000/api/songs/',
+            data: {
+                'name': name[0],
+                'owned': owned,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data) {
+                    console.log(data);
+                    alert('Song uploaded!')
+                    location.reload('true');
+                } else {
+                    alert('Sorry can\'t upload this song!');
+                }
+            },
+            error: function () {
+                alert('Something wrong!');
+            }
+        });
+    } else {
+        alert('This file is not an audio!');
+    }
+});

@@ -31,12 +31,12 @@
 		<input type="hidden" id="follower" value="{{ currusr.usrname }}">
 		<input type="hidden" id="followed" value="{{ watchingusr.usrname }}">
 		{% if followcheck == -1 %}
-		<!-- style="display:none;" -->
-			<!-- <label class="btn btn-sm btn-block orangeoutlinebtn mt-3">
+			<input type="hidden" id="upload-usrname" value="{{ currusr.usrname }}">
+			<label class="btn btn-sm btn-block orangeoutlinebtn mt-3">
 				Upload a new song
 				<input id="song-upload" type="file" style="display:none;">
-			</label> -->
-			<input type="button" value="Your profile" class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled>
+			</label>
+			<!-- <input type="button" value="Your profile" class="btn btn-sm btn-block orangeoutlinebtn mt-3" disabled> -->
 		{% elif followcheck == 1 %}
 			<button class="btn btn-sm btn-block orangeoutlinebtn mt-3" id="unfollow-btn">Following</button>
 		{% else %}
@@ -70,6 +70,11 @@
 											<i class="fas fa-heart"></i>
 											Like <span class="badge badge-light">{{ songinfo.likes }}</span>
 										</button>
+										{% if followcheck == -1 %}
+										<button type="button" class="btn btn-sm btn-danger mt-2" id="dels-{{ songinfo.id }}-btn">
+											Delete
+										</button>
+										{% endif %}
 									</div>
 									<div class="col-4">
 										<span class="badge badge-light my-3 mr-3 float-right" style="color: #505050;">
@@ -230,8 +235,12 @@ $(window).on('load', function(){
 		success: function (sptdata) {
 			if (sptdata) {
 				var sptarr = [];
+				var delsarr = [];
 				for(var i=0; i<sptdata.length; i++){
-						sptarr.push('#spt-' + sptdata[i].id);
+					sptarr.push('#spt-' + sptdata[i].id);
+				}
+				for(var i=0; i<sptdata.length; i++){
+					delsarr.push('#dels-' + sptdata[i].id + '-btn');
 				}
 				// console.log(sptarr);
 				$.each(sptarr, function (index, value) {
@@ -275,6 +284,35 @@ $(window).on('load', function(){
 								location.reload(true);
 							}
 						});
+					});
+				});
+				console.log(delsarr);
+				$.each(delsarr, function (index, value) {
+					$(value).on('click',function() {
+						var delsid = $(value).attr('id').split('-');
+						var r = confirm('Are you sure?');
+						if(r == true){
+							$.ajax({
+								type: "DELETE",
+								url: 'http://127.0.0.1:8000/api/songs/' + delsid[1],
+								dataType: 'json',
+								success: function (spt){
+									if(spt == null){
+										alert("song deleted!!!");
+										location.reload(true);
+									}else {
+										alert("Sorry can\'t get song detail!");
+										location.reload(true);
+									}
+								},
+								error: function () {
+									alert('Something wrong!');
+									location.reload(true);
+								}
+							});
+						} else {
+							console.log(nothing);
+						}
 					});
 				});
 			} else {
